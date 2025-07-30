@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:22:59 by armosnie          #+#    #+#             */
-/*   Updated: 2025/07/29 16:50:20 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/07/30 14:22:18 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,11 @@ void	free_array(char **split)
 	free(split);
 }
 
-// void	error(char *str)
-// {
-// 	perror(str);
-// }
+void	error(char *str, int code)
+{
+	perror(str);
+	exit(code);
+}
 
 void	f_error(char *str)
 {

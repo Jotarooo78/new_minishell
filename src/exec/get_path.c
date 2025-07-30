@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 16:43:06 by armosnie          #+#    #+#             */
-/*   Updated: 2025/07/29 16:51:16 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/07/30 16:59:01 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ char    **get_path(char **envp)
         }
         i++;
     }
-    f_error("path not found");
+    error("path not found", 1);
     return (NULL);
 }
 
@@ -60,7 +60,7 @@ void    exec(char *cmd_cut, char **cmd, char **path, char **envp)
         full_path = join_slash(path[i], cmd_cut);
         if (full_path == NULL)
             return ;
-        if (access(path[i], F_OK | X_OK) == 0)
+        if (access(full_path, F_OK | X_OK) == 0)
             execve(full_path, cmd, envp);
         free(full_path);
         i++;
@@ -108,11 +108,11 @@ bool    exe_my_cmd(t_cmd *cmd, char **envp)
     {
         free_array(full_cmd);
         free_array(path);
-        f_error("env error");
+        error("env error", 127);
     }
     exec(full_cmd[0], full_cmd, path, envp);
     free_array(path);
     free_array(full_cmd);
-    f_error("command not found");
+    error("command not found", 127);
     return (false);
 }

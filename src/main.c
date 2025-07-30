@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:54:53 by messengu          #+#    #+#             */
-/*   Updated: 2025/07/30 13:20:24 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/07/30 17:01:11 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,7 @@ int main(int argc, char **argv, char **envp)
 	{
 		line = readline("\033[36mminishell> \033[0m");
 		if (line == NULL)
-		{
-			printf("stop\n");
 			break;
-		}
 		add_history(line);
 		cmd = parse(line);
 		pipe_function(cmd, envp);
