@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:39:21 by armosnie          #+#    #+#             */
-/*   Updated: 2025/07/30 17:18:46 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/07/30 18:16:42 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,13 @@
 
 void	child_call(t_cmd *cmd, int *pipefd, char **envp)
 {
-    if (cmd->infile && cmd->infile->name)
-        open_infile(cmd, pipefd);
-	else if (cmd->outfile && cmd->outfile)
+	if (cmd->infile && cmd->infile->name)
+		open_infile(cmd, pipefd);
+	else if (cmd->outfile && cmd->outfile->name)
 		open_outfile(cmd, pipefd);
-    if (cmd->input_type == STDIN && cmd->output_type == STDOUT)
-        exe_my_cmd(cmd, envp);
 	else
 	{
-        close(pipefd[READ]);
+		close(pipefd[READ]);
 		dup2(pipefd[WRITE], FD_STDOUT);
 		close(pipefd[WRITE]);
 	}
@@ -32,12 +30,12 @@ void	child_call(t_cmd *cmd, int *pipefd, char **envp)
 
 void	parent_call(t_cmd *cmd, int *pipefd)
 {
-    if (cmd->output_type == PIPEOUT)
-    {
-        close(pipefd[WRITE]);
-        dup2(pipefd[READ], FD_STDIN);
-        close(pipefd[READ]);
-    }
+	if (cmd->output_type == PIPEOUT)
+	{
+		close(pipefd[WRITE]);
+		dup2(pipefd[READ], FD_STDIN);
+		close(pipefd[READ]);
+	}
 }
 
 void	wait_child(void)
@@ -64,7 +62,6 @@ void	pipe_function(t_cmd *cmd, char **envp)
 			parent_call(cmd, pipefd);
 		cmd = cmd->next;
 	}
-    // close(FD_STDIN);
 	wait_child();
 }
 
