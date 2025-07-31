@@ -12,7 +12,6 @@ SRCS = \
 	src/parsing/tokenizer.c \
 	src/parsing/token.c \
 	src/parsing/token_checker.c \
-	src/utils/stack.c \
 	src/parsing/utils.c \
 	src/parsing/expander.c \
 	src/parsing/quote_remover.c \

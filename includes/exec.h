@@ -18,19 +18,16 @@
 
 typedef struct s_cmd	t_cmd;
 
-void					open_infile(t_cmd *cmd, int *pipe_fd);
-void					open_outfile(t_cmd *cmd, int *pipe_fd);
 bool					is_built_in(char *cmd);
-int						count_cmd(t_cmd *cmd);
-int						count_cmd_args(t_cmd *cmd);
 char					**get_path(char **envp);
 void					free_array(char **split);
+void					open_infile(t_cmd *cmd, int *pipe_fd);
+void					open_outfile(t_cmd *cmd, int *pipe_fd);
 void					pipe_function(t_cmd *cmd, char **envp);
-void					manage_infile(t_cmd *cmd, int *pipefd);
-void					manage_outfile(t_cmd *cmd, int *pipefd);
 bool					exe_my_cmd(t_cmd *cmd, char **envp);
-void					error(char *str, int code);
-void					f_error(char *str);
+void					error(t_cmd *cmd, char *str, int code);
+int						count_cmd(t_cmd *cmd);
+int						count_cmd_args(t_cmd *cmd);
 // void					manage_here_doc(t_cmd *cmd);
 
 #endif

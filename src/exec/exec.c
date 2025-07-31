@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:39:21 by armosnie          #+#    #+#             */
-/*   Updated: 2025/07/30 18:16:42 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/07/31 15:03:13 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,18 +44,29 @@ void	wait_child(void)
 		;
 }
 
+void	restaure_old_fd(int *old_fd)
+{
+	if ((dup2(old_fd[READ], READ) == -1) || dup2(old_fd[WRITE], WRITE) == -1)
+	{
+		perror("dup error\n");
+	}
+}
+
 void	pipe_function(t_cmd *cmd, char **envp)
 {
 	int		pipefd[2];
 	pid_t	pid;
-
+	int		old_fd[2];
+	
+	if (((old_fd[0] = dup(READ)) == -1) || ((old_fd[1] = dup(WRITE)) == -1))
+		return (error(cmd, "dup error\n", 1));
 	while (cmd)
 	{
 		if (cmd->output_type == PIPEOUT)
 			pipe(pipefd);
 		pid = fork();
 		if (pid == -1)
-			error("fork failed", 1);
+			error(cmd, "fork failed", 1);
 		if (pid == 0)
 			child_call(cmd, pipefd, envp);
 		else
@@ -63,12 +74,5 @@ void	pipe_function(t_cmd *cmd, char **envp)
 		cmd = cmd->next;
 	}
 	wait_child();
+	restaure_old_fd(old_fd);
 }
-
-// void    executable(t_cmd *cmd, char **envp)
-// {
-//     if (cmd->input_type == STDIN && cmd->output_type == STDOUT)
-//         exe_my_cmd(cmd, envp);
-//     else
-//         pipe_function(cmd, envp);
-// }

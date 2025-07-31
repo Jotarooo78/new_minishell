@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:19:43 by messengu          #+#    #+#             */
-/*   Updated: 2025/07/29 15:52:46 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/07/31 14:00:56 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ typedef struct s_file
 	char				*name;
 	char				permission[3];
 	int					append;
-	int					fd; //variable temporaraire, ne pas stocker les fd car les files peuvent etre supprimes entre le parsing et l'exec
+	// int					fd; //variable temporaraire, ne pas stocker les fd car les files peuvent etre supprimes entre le parsing et l'exec
 	struct s_file		*next;
 }						t_file;
 
@@ -64,23 +64,11 @@ typedef struct s_cmd
 	struct s_cmd		*next;
 }						t_cmd;
 
-typedef struct s_stack
-{
-	void				*value;
-	struct s_stack		*next;
-}						t_stack;
 
 // ---- FUNCTIONS ----
 
-// -- stacks
 t_cmd					*parse(char *line);
-void    				executable(t_cmd *cmd, char **envp);
-t_stack					*init_stack(void);
-void					push(t_stack **stack, void *value);
-void					*pop(t_stack **stack);
-void					*top(t_stack *stack);
-void					clean(t_stack **stack);
-int						is_empty(t_stack *stack);
+void    				pipe_function(t_cmd *cmd, char **envp);
 void					print_cmd(t_cmd *cmd);
 int						check_cmds(t_cmd *cmd);
 t_cmd					*tokens_to_cmds(t_token *tokens);
