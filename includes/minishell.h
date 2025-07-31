@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:19:43 by messengu          #+#    #+#             */
-/*   Updated: 2025/07/31 14:00:56 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/07/31 16:12:08 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ typedef struct s_file
 	char				*name;
 	char				permission[3];
 	int					append;
-	// int					fd; //variable temporaraire, ne pas stocker les fd car les files peuvent etre supprimes entre le parsing et l'exec
 	struct s_file		*next;
 }						t_file;
 
@@ -56,8 +55,8 @@ typedef struct s_cmd
 {
 	char				*name;
 	char				**args;
-	t_file				*infile; // ici, tableau de str.
-	t_file				*outfile; //same
+	t_file				*infile;
+	t_file				*outfile;
 	t_input_type		input_type;
 	t_output_type		output_type;
 	t_heredoc			*heredocs;

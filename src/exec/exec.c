@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:39:21 by armosnie          #+#    #+#             */
-/*   Updated: 2025/07/31 15:03:13 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/07/31 16:35:49 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 void	child_call(t_cmd *cmd, int *pipefd, char **envp)
 {
+	// if (cmd->heredocs && cmd->heredocs)
+	// 	open_heredocs(cmd, pipefd);
 	if (cmd->infile && cmd->infile->name)
 		open_infile(cmd, pipefd);
 	else if (cmd->outfile && cmd->outfile->name)
