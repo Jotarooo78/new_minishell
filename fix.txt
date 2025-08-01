@@ -1,0 +1,133 @@
+heredoc: a faire dans le parsing, au meme moment que la verification de la syntaxe
+
+bash-5.1$ << asd wer
+> aaaa
+> aaa
+> asd
+bash: wer: command not found
+
+
+
+
+bien differencier argument et options
+
+
+
+il faut la liste complete des infiles et des outfiles dans les redirections, pas seulement le dernier.
+En effet, il faut les dup2 successivement.
+ex:
+
+echo aaa > out1 > out2 > out3 > /dev/stdout
+
+-> ici, aaa est ecrit dans out3, car le stdout est successivement dup2 jusqu a out3, et comme stdout = out3 voila t a compris le s.
+
+
+
+
+L'expand se fait avant le parsing.
+
+Si je fais:
+
+bash-5.1$ export a="ls -"
+bash-5.1$ export b="la"
+bash-5.1$ $a$b
+total 56
+drwxr-xr-x 8 armosnie 2024_paris   221 Jul 29 14:42 .
+drwxr-xr-x 7 armosnie 2024_paris    93 Jul 28 14:01 ..
+-rw-r--r-- 1 armosnie 2024_paris     0 Jul 29 14:37 file1
+-rw-r--r-- 1 armosnie 2024_paris     0 Jul 29 14:37 file2
+-rw-r--r-- 1 armosnie 2024_paris     4 Jul 29 14:37 file3
+
+
+car a et b ont etes export, or dans votre cas, $a$b est un seul token,
+donc l'expand va transformer la string en "ls -la", ce qui va donner command not found
+
+
+minishell> ls<out45|cat
+
+PARSED COMMANDS
+cmd 1:
+[NAME]: ls
+[ARGS]: NULL
+[INFILE]:  > out45
+[OUTFILE]: NULL
+[HEREDOC]: NULL
+[OUTPUT_TYPE]: PIPEOUT -> ici
+[INPUT_TYPE]: STDIN
+
+cmd 2:
+[NAME]: cat
+[ARGS]: NULL
+[INFILE]: NULL
+[OUTFILE]: NULL
+[HEREDOC]: NULL
+[OUTPUT_TYPE]: STDOUT
+[INPUT_TYPE]: PIPEIN ->ici
+
+c'est l'inverse, pipein et pipeout, mais vous vous comprenez je suis juste un gros casse couille en gros.
+
+PARSED COMMANDS
+cmd 1:
+[NAME]: (null)
+[ARGS]: NULL
+[INFILE]: NULL
+[OUTFILE]: NULL
+[HEREDOC]:  << EOF1  << EOF
+[OUTPUT_TYPE]: STDOUT
+[INPUT_TYPE]: HEREDOC
+
+heredoc> armand
+heredoc> EOF1
+heredoc> armand2
+heredoc> EOF
+minishell> 
+
+les heredocs sont traites a l'envers dans bash c'est EOF et apres EOF1
+
+minishell> << q1 << q2 << q3 << q4 << q5
+
+PARSED COMMANDS
+cmd 1:
+[NAME]: (null)
+[ARGS]: NULL
+[INFILE]: NULL
+[OUTFILE]: NULL
+[HEREDOC]:  << q5  << q4  << q3  << q2  << q1
+[OUTPUT_TYPE]: STDOUT
+[INPUT_TYPE]: HEREDOC
+
+heredoc> armand
+heredoc> q5
+heredoc> dofoaef
+heredoc> q4
+heredoc> fjoifejip
+heredoc> q3
+heredoc> gsoigjrs
+heredoc> q2
+heredoc> sgrjpgrj
+heredoc> q1
+minishell> 
+
+exec :
+
+minishell> grep a < ftext
+
+PARSED COMMANDS
+cmd 1:
+[NAME]: grep
+[ARGS]: a
+[INFILE]:  > ftext
+[OUTFILE]: NULL
+[HEREDOC]: NULL
+[OUTPUT_TYPE]: STDOUT
+[INPUT_TYPE]: STDIN
+
+armosnie@f1r11s10:~/42/3circle/new_minishell$ cat << EOF << E
+OF1
+> echo aaaa
+> EOF
+> echo bbb
+> EOF1
+echo bbb
+
+besoin de proteger les fermetures de pipe a chaque erreur

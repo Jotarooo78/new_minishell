@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:39:21 by armosnie          #+#    #+#             */
-/*   Updated: 2025/07/31 16:35:49 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/01 18:28:48 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,16 @@
 
 void	child_call(t_cmd *cmd, int *pipefd, char **envp)
 {
-	// if (cmd->heredocs && cmd->heredocs)
-	// 	open_heredocs(cmd, pipefd);
-	if (cmd->infile && cmd->infile->name)
+	if (cmd->heredocs)
+	{
+		dup2(cmd->heredocs->heredoc_fd, FD_STDIN);
+		close(cmd->heredocs->heredoc_fd);
+	}
+	else if (cmd->infile && cmd->infile->name)
 		open_infile(cmd, pipefd);
 	else if (cmd->outfile && cmd->outfile->name)
 		open_outfile(cmd, pipefd);
-	else
+	if (cmd->input_type == PIPEIN || cmd->output_type == PIPEOUT)
 	{
 		close(pipefd[READ]);
 		dup2(pipefd[WRITE], FD_STDOUT);
@@ -64,6 +67,8 @@ void	pipe_function(t_cmd *cmd, char **envp)
 		return (error(cmd, "dup error\n", 1));
 	while (cmd)
 	{
+		if (cmd->heredocs)
+			manage_heredocs(cmd);
 		if (cmd->output_type == PIPEOUT)
 			pipe(pipefd);
 		pid = fork();

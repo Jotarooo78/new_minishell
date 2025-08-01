@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:19:43 by messengu          #+#    #+#             */
-/*   Updated: 2025/07/31 16:12:08 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/01 17:31:05 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ typedef struct s_heredoc
 	char				*delimiter;
 	char				*content;
 	int					expand_vars;
+	int					heredoc_fd;
 	struct s_heredoc	*next;
 }						t_heredoc;
 

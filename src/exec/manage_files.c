@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 14:52:39 by armosnie          #+#    #+#             */
-/*   Updated: 2025/07/31 16:34:50 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/01 18:14:06 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,54 +65,55 @@ void	open_outfile(t_cmd *cmd, int *pipe_fd)
 	}
 }
 
-void	open_heredocs(t_cmd *cmd, int *pipe_fd)
+void	child_process_heredoc(t_heredoc *heredoc, int *pipefd)
 {
-	int fd;
-	t_heredoc *file;
+	char	*line;
 
-	file = cmd->heredocs;
-	if (cmd->input_type == PIPEIN || cmd->output_type == PIPEOUT)
-	{
-		close(pipe_fd[READ]);
-		dup2(pipe_fd[WRITE], FD_STDOUT);
-		close(pipe_fd[WRITE]);
-	}
 	while (1)
 	{
-		fd = open(file->content, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (fd == -1)
-		{
-			error(cmd, file->content, 1);
-		}
-		if (ft_strcmp(file->delimiter, file->content) == 0)
-			file = file->next;
-		dup2(fd, FD_STDOUT);
-		close(fd);
-		if (!file)
-			break ;
-	}
-}
-
-
-void	manage_here_doc(t_cmd *cmd)
-{
-	char *line;
-	int pipefd[2];
-
-	if (pipe(pipefd) == -1)
-		error(cmd, "pipe failed\n", 1);
-	while (1)
-	{
-		ft_putstr_fd("here_doc>", 1);
-		line = get_next_line(FD_STDIN);
+		line = readline("\033[36mheredoc> \033[0m");
 		if (line == NULL)
-			break ;
-		if (compare_without_backslash(cmd, line) == true)
+			exit(0);
+		if (ft_strncmp(heredoc->delimiter, line, ft_strlen(line)) == 0)
 			break ;
 		write(pipefd[WRITE], line, ft_strlen(line));
+		write(pipefd[WRITE], "\n", 1);
 		free(line);
 	}
-	close(pipefd[WRITE]);
-	dup2(pipefd[READ], FD_STDIN);
 	close(pipefd[READ]);
+	close(pipefd[WRITE]);
+	free(line);
+	exit(0);
+}
+
+void	parent_process_heredoc(pid_t pid)
+{
+	int	status;
+
+	waitpid(pid, &status, 0);
+}
+
+void	manage_heredocs(t_cmd *cmd)
+{
+	t_heredoc	*heredoc;
+	int			pipefd[2];
+	pid_t		pid;
+
+	heredoc = cmd->heredocs;
+	while (heredoc)
+	{
+		if (pipe(pipefd) == -1)
+			error(cmd, "pipe failed\n", 1);
+		pid = fork();
+		if (pid == -1)
+			error(cmd, "fork failed\n", 1); // besoin de proteger les fermetures de pipe a chaque erreur
+		if (pid == 0)
+			child_process_heredoc(heredoc, pipefd);
+		else
+			parent_process_heredoc(pid);
+		heredoc->heredoc_fd = pipefd[READ]; // quand fermer ce fd correctement ?
+		close(pipefd[WRITE]);
+		// close(pipefd[READ]); // boucle infini
+		heredoc = heredoc->next;
+	}
 }
