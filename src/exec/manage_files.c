@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 14:52:39 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/01 18:14:06 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/01 18:38:42 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	open_infile(t_cmd *cmd, int *pipe_fd)
 	t_file	*file;
 
 	file = cmd->infile;
-	if (cmd->input_type == PIPEIN || cmd->output_type == PIPEOUT)
+	if (cmd->output_type == PIPEOUT)
 	{
 		close(pipe_fd[READ]);
 		dup2(pipe_fd[WRITE], FD_STDOUT);
@@ -44,7 +44,7 @@ void	open_outfile(t_cmd *cmd, int *pipe_fd)
 	t_file	*file;
 
 	file = cmd->outfile;
-	if (cmd->input_type == PIPEIN || cmd->output_type == PIPEOUT)
+	if (cmd->output_type == PIPEOUT)
 	{
 		close(pipe_fd[READ]);
 		close(pipe_fd[WRITE]);
@@ -111,6 +111,8 @@ void	manage_heredocs(t_cmd *cmd)
 			child_process_heredoc(heredoc, pipefd);
 		else
 			parent_process_heredoc(pid);
+		// if (heredoc->next)
+		// 	close(heredoc->heredoc_fd);
 		heredoc->heredoc_fd = pipefd[READ]; // quand fermer ce fd correctement ?
 		close(pipefd[WRITE]);
 		// close(pipefd[READ]); // boucle infini

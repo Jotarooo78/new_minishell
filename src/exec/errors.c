@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:22:59 by armosnie          #+#    #+#             */
-/*   Updated: 2025/07/31 14:59:06 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/01 18:35:58 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ void	free_files(t_cmd *cmd)
 	{
 		free(cmd->heredocs->delimiter);
 		free(cmd->heredocs->content);
+		close(cmd->heredocs->heredoc_fd);
 		tmp_h = cmd->heredocs->next;
 		free(cmd->heredocs);
 		cmd->heredocs = tmp_h;

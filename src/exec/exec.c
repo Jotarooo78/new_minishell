@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:39:21 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/01 18:28:48 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/01 18:33:35 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ void	restaure_old_fd(int *old_fd)
 	{
 		perror("dup error\n");
 	}
+	close(old_fd[READ]);
+	close(old_fd[WRITE]);
 }
 
 void	pipe_function(t_cmd *cmd, char **envp)
