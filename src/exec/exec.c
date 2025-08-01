@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:39:21 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/01 18:33:35 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/01 18:40:34 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ void	child_call(t_cmd *cmd, int *pipefd, char **envp)
 	}
 	else if (cmd->infile && cmd->infile->name)
 		open_infile(cmd, pipefd);
-	else if (cmd->outfile && cmd->outfile->name)
+	if (cmd->outfile && cmd->outfile->name)
 		open_outfile(cmd, pipefd);
-	if (cmd->input_type == PIPEIN || cmd->output_type == PIPEOUT)
+	else if (cmd->output_type == PIPEOUT)
 	{
 		close(pipefd[READ]);
 		dup2(pipefd[WRITE], FD_STDOUT);
