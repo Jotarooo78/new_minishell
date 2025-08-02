@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:22:59 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/02 16:12:28 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/02 17:35:22 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ void	free_array(char **split)
 	int	j;
 	
 	j = 0;
+	if (!split)
+		return ;
 	while (split[j])
 	{
 		free(split[j]);

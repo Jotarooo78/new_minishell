@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:39:21 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/02 17:22:29 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/02 17:41:49 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,6 @@ void	pipe_function(t_cmd *cmd, char **envp)
 		// system("ls -la /proc/$PPID/fd/");
 		cmd = cmd->next;
 	}
-	restaure_old_fd(old_fd);
-	// close_all_fd(cmd->pipefd); // segfault
 	wait_child();
+	restaure_old_fd(old_fd);
 }
