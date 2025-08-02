@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:39:21 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/01 18:40:34 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/02 11:50:52 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,8 @@ void	pipe_function(t_cmd *cmd, char **envp)
 	{
 		if (cmd->heredocs)
 			manage_heredocs(cmd);
-		if (cmd->output_type == PIPEOUT)
-			pipe(pipefd);
+		if (cmd->output_type == PIPEOUT && pipe(pipefd) == -1)
+			error(cmd, "pipe failed", 1);
 		pid = fork();
 		if (pid == -1)
 			error(cmd, "fork failed", 1);
@@ -80,6 +80,8 @@ void	pipe_function(t_cmd *cmd, char **envp)
 			child_call(cmd, pipefd, envp);
 		else
 			parent_call(cmd, pipefd);
+		// printf("PID parent: %d\n", getpid());
+		// system("ls -la /proc/$PPID/fd/");
 		cmd = cmd->next;
 	}
 	wait_child();

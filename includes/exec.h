@@ -28,6 +28,7 @@ void					pipe_function(t_cmd *cmd, char **envp);
 void					wait_child(void);
 bool					exe_my_cmd(t_cmd *cmd, char **envp);
 void					error(t_cmd *cmd, char *str, int code);
+void					close_all_fd(int *fd);
 int						count_cmd(t_cmd *cmd);
 int						count_cmd_args(t_cmd *cmd);
 // void					open_heredocs(t_cmd *cmd, int *pipe_fd);

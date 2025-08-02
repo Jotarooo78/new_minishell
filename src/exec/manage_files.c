@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 14:52:39 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/01 18:38:42 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/02 11:28:45 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,10 +86,11 @@ void	child_process_heredoc(t_heredoc *heredoc, int *pipefd)
 	exit(0);
 }
 
-void	parent_process_heredoc(pid_t pid)
+void	parent_process_heredoc(int *pipefd, pid_t pid)
 {
 	int	status;
 
+	close(pipefd[WRITE]);
 	waitpid(pid, &status, 0);
 }
 
@@ -110,12 +111,15 @@ void	manage_heredocs(t_cmd *cmd)
 		if (pid == 0)
 			child_process_heredoc(heredoc, pipefd);
 		else
-			parent_process_heredoc(pid);
+		{
+			parent_process_heredoc(pipefd, pid);
+			if (heredoc->heredoc_fd != -1)
+				close(heredoc->heredoc_fd);
+			heredoc->heredoc_fd = pipefd[READ]; // quand fermer ce fd correctement ?
+		}
+		heredoc = heredoc->next;
 		// if (heredoc->next)
 		// 	close(heredoc->heredoc_fd);
-		heredoc->heredoc_fd = pipefd[READ]; // quand fermer ce fd correctement ?
-		close(pipefd[WRITE]);
 		// close(pipefd[READ]); // boucle infini
-		heredoc = heredoc->next;
 	}
 }

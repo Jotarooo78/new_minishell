@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:22:59 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/01 18:35:58 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/02 11:33:08 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,12 @@ void	free_array(char **split)
 		j++;
 	}
 	free(split);
+}
+
+void	close_all_fd(int *fd)
+{
+	close(fd[READ]);
+	close(fd[WRITE]);
 }
 
 void	free_files(t_cmd *cmd)
