@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:39:21 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/02 16:25:36 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/02 16:48:24 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,12 +49,18 @@ void	wait_child(void)
 		;
 }
 
-void	restaure_old_fd(t_cmd *cmd, int *old_fd)
+void	restaure_old_fd(int *old_fd)
 {
 	if (dup2(old_fd[READ], READ) == -1)
-		error(cmd, "dup error\n", 1);
+	{
+		perror("dup error\n");
+		exit(1);
+	}
 	if (dup2(old_fd[WRITE], WRITE) == -1)
-		error(cmd, "dup error\n", 1);
+	{
+		perror("dup error\n");
+		exit(1);
+	}
 	close(old_fd[READ]);
 	close(old_fd[WRITE]);
 }
@@ -72,15 +78,13 @@ void	pipe_function(t_cmd *cmd, char **envp)
 			manage_heredocs(cmd);
 		if (cmd->output_type == PIPEOUT && pipe(cmd->pipefd) == -1) // 2 fd
 		{
-			restaure_old_fd(cmd, old_fd);
-			close_all_fd(cmd->pipefd);
+			restaure_old_fd(old_fd);
 			error(cmd, "pipe failed", 1);
 		}
 		pid = fork(); // nbr total de fd * nbr de fork (cmd)
 		if (pid == -1)
 		{
-			restaure_old_fd(cmd, old_fd);
-			close_all_fd(cmd->pipefd);
+			restaure_old_fd(old_fd);
 			error(cmd, "fork failed", 1);
 		}
 		if (pid == 0)
@@ -91,7 +95,7 @@ void	pipe_function(t_cmd *cmd, char **envp)
 		// system("ls -la /proc/$PPID/fd/");
 		cmd = cmd->next;
 	}
-	restaure_old_fd(cmd, old_fd);
-	close_all_fd(cmd->pipefd);
+	restaure_old_fd(old_fd);
+	// close_all_fd(cmd->pipefd); // segfault
 	wait_child();
 }
