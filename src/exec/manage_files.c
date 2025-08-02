@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 14:52:39 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/02 15:05:21 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/02 16:05:06 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,17 +96,20 @@ void	manage_heredocs(t_cmd *cmd)
 {
 	t_heredoc	*heredoc;
 	pid_t		pid;
+	int			tmp_pipe[2];
 
 	heredoc = cmd->heredocs;
 	while (heredoc)
 	{
-		if (pipe(cmd->pipefd) == -1)
+		if (pipe(tmp_pipe) == -1)
 			error(cmd, "pipe failed\n", 1);
+		cmd->pipefd[READ] = tmp_pipe[READ];
+		cmd->pipefd[WRITE] = tmp_pipe[WRITE];
 		pid = fork();
 		if (pid == -1)
 		{
-			close(cmd->pipefd[READ]);
-			close(cmd->pipefd[WRITE]);
+			close(tmp_pipe[READ]);
+			close(tmp_pipe[WRITE]);
 			error(cmd, "fork failed", 1);
 		}
 		if (pid == 0)
@@ -118,9 +121,12 @@ void	manage_heredocs(t_cmd *cmd)
 				close(heredoc->heredoc_fd);
 			heredoc->heredoc_fd = cmd->pipefd[READ]; // quand fermer ce fd correctement ?
 		}
+		
 		heredoc = heredoc->next;
 		// if (heredoc->next)
 		// 	close(heredoc->heredoc_fd);
 		// close(cmd->pipefd[READ]); // boucle infini
 	}
+		cmd->pipefd[READ] = -1;
+		cmd->pipefd[WRITE] = -1;
 }
