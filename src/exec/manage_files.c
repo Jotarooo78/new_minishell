@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 14:52:39 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/02 16:05:06 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/02 16:22:13 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,12 @@ void	open_infile(t_cmd *cmd)
 	t_file	*file;
 
 	file = cmd->infile;
-	if (cmd->output_type == PIPEOUT)
-	{
-		close(cmd->pipefd[READ]);
-		dup2(cmd->pipefd[WRITE], FD_STDOUT);
-		close(cmd->pipefd[WRITE]);
-	}
+	// if (cmd->output_type == PIPEOUT)
+	// {
+	// 	close(cmd->pipefd[READ]);
+	// 	dup2(cmd->pipefd[WRITE], FD_STDOUT);
+	// 	close(cmd->pipefd[WRITE]);
+	// }
 	while (file && file->name)
 	{
 		file->fd = open(file->name, O_RDONLY);
@@ -42,11 +42,11 @@ void	open_outfile(t_cmd *cmd)
 	t_file	*file;
 
 	file = cmd->outfile;
-	if (cmd->output_type == PIPEOUT)
-	{
-		close(cmd->pipefd[READ]);
-		close(cmd->pipefd[WRITE]);
-	}
+	// if (cmd->output_type == PIPEOUT)
+	// {
+	// 	close(cmd->pipefd[READ]);
+	// 	close(cmd->pipefd[WRITE]);
+	// }
 	while (file && file->name)
 	{
 		if (file->append)

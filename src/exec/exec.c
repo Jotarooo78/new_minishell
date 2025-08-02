@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:39:21 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/02 16:02:27 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/02 16:25:36 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,10 +62,8 @@ void	restaure_old_fd(t_cmd *cmd, int *old_fd)
 void	pipe_function(t_cmd *cmd, char **envp)
 {
 	pid_t	pid;
-	t_cmd *tmp;
 	int	old_fd[2];
 
-	tmp = cmd;
 	if (((old_fd[0] = dup(READ)) == -1) || ((old_fd[1] = dup(WRITE)) == -1)) // 2 fd
 		return (error(cmd, "dup error\n", 1));
 	while (cmd)
@@ -91,12 +89,9 @@ void	pipe_function(t_cmd *cmd, char **envp)
 			parent_call(cmd);
 		// printf("PID parent: %d\n", getpid());
 		// system("ls -la /proc/$PPID/fd/");
-		if (!cmd->next)
-		{
-			restaure_old_fd(cmd, old_fd);
-			close_all_fd(cmd->pipefd);
-		}
 		cmd = cmd->next;
 	}
+	restaure_old_fd(cmd, old_fd);
+	close_all_fd(cmd->pipefd);
 	wait_child();
 }
