@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:22:59 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/02 11:33:08 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/02 16:12:28 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,10 @@ void	free_array(char **split)
 
 void	close_all_fd(int *fd)
 {
-	close(fd[READ]);
-	close(fd[WRITE]);
+	if (fd[READ] != -1)
+		close(fd[READ]);
+	if (fd[WRITE] != -1)
+		close(fd[WRITE]);
 }
 
 void	free_files(t_cmd *cmd)
@@ -41,6 +43,8 @@ void	free_files(t_cmd *cmd)
 	while (cmd->infile)
 	{
 		free(cmd->infile->name);
+		if (cmd->infile->fd != -1)
+			close(cmd->infile->fd);
 		tmp = cmd->infile->next;
 		free(cmd->infile);
 		cmd->infile = tmp;
@@ -48,6 +52,8 @@ void	free_files(t_cmd *cmd)
 	while (cmd->outfile)
 	{
 		free(cmd->outfile->name);
+		if (cmd->outfile->fd != -1)
+			close(cmd->outfile->fd);
 		tmp = cmd->outfile->next;
 		free(cmd->outfile);
 		cmd->outfile = tmp;
@@ -56,7 +62,8 @@ void	free_files(t_cmd *cmd)
 	{
 		free(cmd->heredocs->delimiter);
 		free(cmd->heredocs->content);
-		close(cmd->heredocs->heredoc_fd);
+		if (cmd->heredocs->heredoc_fd != -1)
+			close(cmd->heredocs->heredoc_fd);
 		tmp_h = cmd->heredocs->next;
 		free(cmd->heredocs);
 		cmd->heredocs = tmp_h;
@@ -72,6 +79,8 @@ void	free_all_struct(t_cmd *cmd)
 		free_files(cmd);
 		free(cmd->name);
 		free_array(cmd->args);
+		if (cmd->pipefd[READ] != -1 || cmd->pipefd[WRITE] != -1)
+			close_all_fd(cmd->pipefd);
 		tmp = cmd->next;
 		free(cmd);
 		cmd = tmp;
