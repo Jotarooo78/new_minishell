@@ -6,14 +6,14 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:39:21 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/02 11:50:52 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/02 15:46:20 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/exec.h"
 #include "../../includes/minishell.h"
+#include "../../includes/exec.h"
 
-void	child_call(t_cmd *cmd, int *pipefd, char **envp)
+void	child_call(t_cmd *cmd, char **envp)
 {
 	if (cmd->heredocs)
 	{
@@ -21,25 +21,25 @@ void	child_call(t_cmd *cmd, int *pipefd, char **envp)
 		close(cmd->heredocs->heredoc_fd);
 	}
 	else if (cmd->infile && cmd->infile->name)
-		open_infile(cmd, pipefd);
+		open_infile(cmd);
 	if (cmd->outfile && cmd->outfile->name)
-		open_outfile(cmd, pipefd);
+		open_outfile(cmd);
 	else if (cmd->output_type == PIPEOUT)
 	{
-		close(pipefd[READ]);
-		dup2(pipefd[WRITE], FD_STDOUT);
-		close(pipefd[WRITE]);
+		close(cmd->pipefd[READ]);
+		dup2(cmd->pipefd[WRITE], FD_STDOUT);
+		close(cmd->pipefd[WRITE]);
 	}
 	exe_my_cmd(cmd, envp);
 }
 
-void	parent_call(t_cmd *cmd, int *pipefd)
+void	parent_call(t_cmd *cmd)
 {
 	if (cmd->output_type == PIPEOUT)
 	{
-		close(pipefd[WRITE]);
-		dup2(pipefd[READ], FD_STDIN);
-		close(pipefd[READ]);
+		close(cmd->pipefd[WRITE]);
+		dup2(cmd->pipefd[READ], FD_STDIN);
+		close(cmd->pipefd[READ]);
 	}
 }
 
@@ -49,41 +49,56 @@ void	wait_child(void)
 		;
 }
 
-void	restaure_old_fd(int *old_fd)
+void	restaure_old_fd(t_cmd *cmd, int *old_fd)
 {
-	if ((dup2(old_fd[READ], READ) == -1) || dup2(old_fd[WRITE], WRITE) == -1)
-	{
-		perror("dup error\n");
-	}
-	close(old_fd[READ]);
-	close(old_fd[WRITE]);
+	if (dup2(old_fd[READ], READ) == -1)
+		error(cmd, "dup error\n", 1);
+	if (dup2(old_fd[WRITE], WRITE) == -1)
+		error(cmd, "dup error\n", 1);
 }
 
 void	pipe_function(t_cmd *cmd, char **envp)
 {
-	int		pipefd[2];
 	pid_t	pid;
-	int		old_fd[2];
-	
-	if (((old_fd[0] = dup(READ)) == -1) || ((old_fd[1] = dup(WRITE)) == -1))
+	t_cmd *tmp;
+	int	old_fd[2];
+
+	tmp = cmd;
+	if (((old_fd[0] = dup(READ)) == -1) || ((old_fd[1] = dup(WRITE)) == -1)) // 2 fd
 		return (error(cmd, "dup error\n", 1));
 	while (cmd)
 	{
 		if (cmd->heredocs)
 			manage_heredocs(cmd);
-		if (cmd->output_type == PIPEOUT && pipe(pipefd) == -1)
+		if (cmd->output_type == PIPEOUT && pipe(cmd->pipefd) == -1) // 2 fd
+		{
+			restaure_old_fd(cmd, old_fd);
+			close_all_fd(cmd->pipefd);
+			close_all_fd(old_fd);
 			error(cmd, "pipe failed", 1);
-		pid = fork();
+		}
+		pid = fork(); // nbr total de fd * nbr de fork (cmd)
 		if (pid == -1)
+		{
+			restaure_old_fd(cmd, old_fd);
+			close_all_fd(cmd->pipefd);
+			close_all_fd(old_fd);
 			error(cmd, "fork failed", 1);
+		}
 		if (pid == 0)
-			child_call(cmd, pipefd, envp);
+			child_call(cmd, envp);
 		else
-			parent_call(cmd, pipefd);
+			parent_call(cmd);
 		// printf("PID parent: %d\n", getpid());
 		// system("ls -la /proc/$PPID/fd/");
+		if (!cmd->next)
+		{
+			restaure_old_fd(cmd, old_fd);
+			close_all_fd(cmd->pipefd);
+			close_all_fd(old_fd);
+		}
 		cmd = cmd->next;
 	}
+	close_all_fd(old_fd);
 	wait_child();
-	restaure_old_fd(old_fd);
 }

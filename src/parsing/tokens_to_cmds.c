@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 15:12:25 by messengu          #+#    #+#             */
-/*   Updated: 2025/08/02 13:50:22 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/02 15:45:45 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ void	init_cmd(t_cmd *cmd)
 {
 	cmd->name = NULL;
 	cmd->args = NULL;
+	cmd->pipefd[0] = -1;
+	cmd->pipefd[1] = -1;
 	cmd->infile = NULL;
 	cmd->outfile = NULL;
 	cmd->next = NULL;
@@ -115,6 +117,7 @@ t_cmd	*tokens_to_cmds(t_token *tokens)
 						cmds->outfile->permission[1] = '2';
 						cmds->outfile->permission[2] = '2';
 						cmds->outfile->append = 1;
+						cmds->outfile->fd = -1;
 						cmds->outfile->next = NULL;
 						current = current->next;
 					}
@@ -154,6 +157,7 @@ t_cmd	*tokens_to_cmds(t_token *tokens)
 						cmds->infile->permission[1] = '4';
 						cmds->infile->permission[2] = '4';
 						cmds->infile->append = 0;
+						cmds->infile->fd = -1;
 						cmds->infile->next = NULL;
 						current = current->next;
 					}
@@ -174,6 +178,7 @@ t_cmd	*tokens_to_cmds(t_token *tokens)
 						cmds->outfile->permission[1] = '2';
 						cmds->outfile->permission[2] = '2';
 						cmds->outfile->append = 0;
+						cmds->outfile->fd = -1;
 						cmds->outfile->next = NULL;
 						current = current->next;
 					}
