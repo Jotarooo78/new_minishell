@@ -6,29 +6,33 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:39:21 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/03 16:27:53 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/03 16:52:07 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
 #include "../../includes/exec.h"
+#include "../../includes/minishell.h"
 
-void debug_fds(const char *label) {
-    fprintf(stderr, "=== %s ===\n", label);
-    for (int i = 0; i < 10; i++) {
-        if (fcntl(i, F_GETFD) != -1) {
-            fprintf(stderr, "FD %d: OPEN\n", i);
-        } else {
-            fprintf(stderr, "FD %d: CLOSED\n", i);
-        }
-    }
-    fprintf(stderr, "==========\n");
+void	debug_fds(const char *label)
+{
+	fprintf(stderr, "=== %s ===\n", label);
+	for (int i = 0; i < 10; i++)
+	{
+		if (fcntl(i, F_GETFD) != -1)
+		{
+			fprintf(stderr, "FD %d: OPEN\n", i);
+		}
+		else
+		{
+			fprintf(stderr, "FD %d: CLOSED\n", i);
+		}
+	}
+	fprintf(stderr, "==========\n");
 }
 
-void	child_call(t_cmd *cmd, char **envp, int *old_fd)
+void	child_call(t_cmd *cmd, char **envp)
 {
 	debug_fds("BEFORE redirections");
-	close_all_fd(old_fd);
 	if (cmd->heredocs)
 	{
 		dup2(cmd->heredocs->heredoc_fd, FD_STDIN);
@@ -66,28 +70,34 @@ void	wait_child(void)
 
 void	restaure_old_fd(int *old_fd)
 {
-	printf("DEBUG: Restoring fd %d->0 and fd %d->1\n", old_fd[READ], old_fd[WRITE]);
-	if (dup2(old_fd[READ], READ) == -1)
+	printf("DEBUG: Restoring fd %d->0 and fd %d->1\n", old_fd[READ],
+		old_fd[WRITE]);
+	if (old_fd[READ])
 	{
-		perror("dup error 1\n");
-		exit(1);
+		if (dup2(old_fd[READ], READ) == -1)
+		{
+			perror("dup error read\n");
+			exit(1);
+		}
 	}
-	if (dup2(old_fd[WRITE], WRITE) == -1)
+	if (old_fd[WRITE])
 	{
-		perror("dup error 2\n");
-		exit(1);
+		if (dup2(old_fd[WRITE], WRITE) == -1)
+		{
+			perror("dup error write\n");
+			exit(1);
+		}
 	}
-	
-	printf("DEBUG: About to close old_fd %d and %d\n", old_fd[READ], old_fd[WRITE]);
-	close(old_fd[READ]);
-	close(old_fd[WRITE]);
+	printf("DEBUG: About to close old_fd %d and %d\n", old_fd[READ],
+		old_fd[WRITE]);
+	close_all_fd(old_fd);
 	printf("DEBUG: old_fd closed\n");
 }
 
 void	pipe_function(t_cmd *cmd, char **envp)
 {
 	pid_t	pid;
-	int	old_fd[2];
+	int		old_fd[2];
 
 	if (((old_fd[0] = dup(READ)) == -1) || ((old_fd[1] = dup(WRITE)) == -1))
 		return (error(cmd, "dup error in pipe function\n", 1));
@@ -107,7 +117,7 @@ void	pipe_function(t_cmd *cmd, char **envp)
 			error(cmd, "fork failed", 1);
 		}
 		if (pid == 0)
-			child_call(cmd, envp, old_fd);
+			child_call(cmd, envp);
 		else
 			parent_call(cmd);
 		// printf("PID parent: %d\n", getpid());

@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:19:43 by messengu          #+#    #+#             */
-/*   Updated: 2025/08/02 15:45:51 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/03 18:32:08 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include "../includes/parsing.h"
 # include <readline/history.h>
 # include <readline/readline.h>
+# include <signal.h>
 # include <stdio.h>
 # include <stdlib.h>
 
@@ -66,11 +67,10 @@ typedef struct s_cmd
 	struct s_cmd		*next;
 }						t_cmd;
 
-
 // ---- FUNCTIONS ----
 
 t_cmd					*parse(char *line);
-void    				pipe_function(t_cmd *cmd, char **envp);
+void					pipe_function(t_cmd *cmd, char **envp);
 void					print_cmd(t_cmd *cmd);
 int						check_cmds(t_cmd *cmd);
 t_cmd					*tokens_to_cmds(t_token *tokens);

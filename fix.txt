@@ -162,3 +162,68 @@ mais les autres fichiers ont exites
 [INPUT_TYPE]: STDIN
 
 conditional jump
+
+<< e << a | cat << u > file4
+
+heredoc> armand
+heredoc> a
+heredoc> mosnier
+heredoc> e
+heredoc> kiki
+heredoc> a
+=== BEFORE redirections ===
+FD 0: OPEN
+FD 1: OPEN
+FD 2: OPEN
+FD 3: OPEN
+FD 4: OPEN
+FD 5: OPEN
+FD 6: OPEN
+FD 7: CLOSED
+FD 8: CLOSED
+FD 9: CLOSED
+==========
+=== BEFORE execve ===
+FD 0: OPEN
+FD 1: OPEN
+FD 2: OPEN
+FD 3: OPEN
+FD 4: OPEN
+FD 5: CLOSED
+FD 6: CLOSED
+FD 7: CLOSED
+FD 8: CLOSED
+FD 9: CLOSED
+==========
+heredoc> 2004hmheredoc> marm
+heredoc> 2004l
+heredoc> 2004hmheredoc> mda
+heredoc> 2004l
+heredoc> 2004hmheredoc> m
+heredoc> 2004l
+heredoc> === BEFORE redirections ===
+FD 0: OPEN
+FD 1: OPEN
+FD 2: OPEN
+FD 3: OPEN
+FD 4: OPEN
+FD 5: CLOSED
+FD 6: CLOSED
+FD 7: CLOSED
+FD 8: CLOSED
+FD 9: CLOSED
+==========
+=== BEFORE execve ===
+FD 0: OPEN
+FD 1: OPEN
+FD 2: OPEN
+FD 3: OPEN
+FD 4: OPEN
+FD 5: CLOSED
+FD 6: CLOSED
+FD 7: CLOSED
+FD 8: CLOSED
+FD 9: CLOSED
+==========
+id^M^M^M^M^M^M
+

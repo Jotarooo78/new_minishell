@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 14:52:39 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/03 16:15:00 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/03 16:59:44 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,11 +93,6 @@ void	manage_heredocs(t_cmd *cmd, int *old_fd)
 	heredoc = cmd->heredocs;
 	while (heredoc)
 	{
-		if (heredoc->heredoc_fd != -1)
-		{
-			close(heredoc->heredoc_fd);
-			heredoc->heredoc_fd = -1;	
-		}
 		if (pipe(pipe_fd_h) == -1)
 			error(cmd, "pipe failed\n", 1);
 		pid = fork();
@@ -110,6 +105,11 @@ void	manage_heredocs(t_cmd *cmd, int *old_fd)
 			child_process_heredoc(cmd, heredoc, pipe_fd_h, old_fd);
 		else
 			heredoc->heredoc_fd = parent_process_heredoc(pid, pipe_fd_h);
+		if (heredoc->heredoc_fd != -1)
+		{
+			close(heredoc->heredoc_fd);
+			heredoc->heredoc_fd = -1;	
+		}
 		heredoc = heredoc->next;
 	}
 }
