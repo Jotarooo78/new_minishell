@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:39:21 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/02 17:41:49 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/03 14:12:44 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,12 +70,12 @@ void	restaure_old_fd(int *old_fd)
 	
 	if (dup2(old_fd[READ], READ) == -1)
 	{
-		perror("dup error\n");
+		perror("dup error 1\n");
 		exit(1);
 	}
 	if (dup2(old_fd[WRITE], WRITE) == -1)
 	{
-		perror("dup error\n");
+		perror("dup error 2\n");
 		exit(1);
 	}
 	
@@ -90,18 +90,18 @@ void	pipe_function(t_cmd *cmd, char **envp)
 	pid_t	pid;
 	int	old_fd[2];
 
-	if (((old_fd[0] = dup(READ)) == -1) || ((old_fd[1] = dup(WRITE)) == -1)) // 2 fd
-		return (error(cmd, "dup error\n", 1));
+	if (((old_fd[0] = dup(READ)) == -1) || ((old_fd[1] = dup(WRITE)) == -1))
+		return (error(cmd, "dup error in pipe function\n", 1));
 	while (cmd)
 	{
 		if (cmd->heredocs)
-			manage_heredocs(cmd);
-		if (cmd->output_type == PIPEOUT && pipe(cmd->pipefd) == -1) // 2 fd
+			manage_heredocs(cmd, old_fd);
+		if (cmd->output_type == PIPEOUT && pipe(cmd->pipefd) == -1)
 		{
 			restaure_old_fd(old_fd);
 			error(cmd, "pipe failed", 1);
 		}
-		pid = fork(); // nbr total de fd * nbr de fork (cmd)
+		pid = fork();
 		if (pid == -1)
 		{
 			restaure_old_fd(old_fd);

@@ -131,3 +131,24 @@ OF1
 echo bbb
 
 besoin de proteger les fermetures de pipe a chaque erreur
+
+bash-5.1$  cat < file1 << e < file2
+> je
+> suis
+> e
+15
+
+
+bash-5.1$ cat < file1 > out << e >> out < file2 > out2
+> je
+> suis
+> e
+bash-5.1$ cat file1
+error test : error nothing can exist here in the hell :
+transmission end:
+bash-5.1$ cat out
+bash-5.1$ cat out2
+15
+
+ordre des priorites et execution reelle : file2 > out2 sur cat < file1 > out << e >> out < file2 > out2 
+mais les autres fichiers ont exites
