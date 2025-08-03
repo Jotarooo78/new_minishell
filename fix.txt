@@ -152,3 +152,13 @@ bash-5.1$ cat out2
 
 ordre des priorites et execution reelle : file2 > out2 sur cat < file1 > out << e >> out < file2 > out2 
 mais les autres fichiers ont exites
+
+[NAME]: echo
+[ARGS]: $?
+[INFILE]: NULL
+[OUTFILE]: NULL
+[HEREDOC]: NULL
+[OUTPUT_TYPE]: STDOUT
+[INPUT_TYPE]: STDIN
+
+conditional jump

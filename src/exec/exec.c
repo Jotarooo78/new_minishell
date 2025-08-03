@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:39:21 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/03 14:12:44 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/03 16:27:53 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ void	wait_child(void)
 void	restaure_old_fd(int *old_fd)
 {
 	printf("DEBUG: Restoring fd %d->0 and fd %d->1\n", old_fd[READ], old_fd[WRITE]);
-	
 	if (dup2(old_fd[READ], READ) == -1)
 	{
 		perror("dup error 1\n");
