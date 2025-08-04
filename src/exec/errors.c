@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:22:59 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/02 17:35:22 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/04 15:07:54 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,38 +37,45 @@ void	close_all_fd(int *fd)
 		close(fd[WRITE]);
 }
 
+void	free_heredocs(t_heredoc *heredocs)
+{
+	t_heredoc *tmp_h;
+	while (heredocs)
+	{
+		free(heredocs->delimiter);
+		free(heredocs->content);
+		if (heredocs->heredoc_fd != -1)
+			close(heredocs->heredoc_fd);
+		tmp_h = heredocs->next;
+		free(heredocs);
+		heredocs = tmp_h;
+	}
+}
+
 void	free_files(t_cmd *cmd)
 {
 	t_file *tmp;
-	t_heredoc *tmp_h;
-	
-	while (cmd->infile)
+	while (cmd)
 	{
-		free(cmd->infile->name);
-		if (cmd->infile->fd != -1)
-			close(cmd->infile->fd);
-		tmp = cmd->infile->next;
-		free(cmd->infile);
-		cmd->infile = tmp;
-	}
-	while (cmd->outfile)
-	{
-		free(cmd->outfile->name);
-		if (cmd->outfile->fd != -1)
-			close(cmd->outfile->fd);
-		tmp = cmd->outfile->next;
-		free(cmd->outfile);
-		cmd->outfile = tmp;
-	}
-	while (cmd->heredocs)
-	{
-		free(cmd->heredocs->delimiter);
-		free(cmd->heredocs->content);
-		if (cmd->heredocs->heredoc_fd != -1)
-			close(cmd->heredocs->heredoc_fd);
-		tmp_h = cmd->heredocs->next;
-		free(cmd->heredocs);
-		cmd->heredocs = tmp_h;
+		while (cmd->infile)
+		{
+			free(cmd->infile->name);
+			if (cmd->infile->fd != -1)
+				close(cmd->infile->fd);
+			tmp = cmd->infile->next;
+			free(cmd->infile);
+			cmd->infile = tmp;
+		}
+		while (cmd->outfile)
+		{
+			free(cmd->outfile->name);
+			if (cmd->outfile->fd != -1)
+				close(cmd->outfile->fd);
+			tmp = cmd->outfile->next;
+			free(cmd->outfile);
+			cmd->outfile = tmp;
+		}
+		free_heredocs(cmd->heredocs);
 	}
 }
 

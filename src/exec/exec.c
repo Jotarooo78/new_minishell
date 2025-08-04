@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:39:21 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/04 14:26:39 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/04 15:08:32 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,6 @@ void	debug_fds(const char *label)
 
 void	child_call(t_cmd *cmd, char **envp, int prev_read_fd)
 {
-	// if (!cmd->heredocs && cmd->heredocs->heredoc_fd != -1)
-	// 	close(cmd->heredocs->heredoc_fd);
 	if (cmd->heredocs && cmd->heredocs->heredoc_fd != -1)
 	{
 		dup2(cmd->heredocs->heredoc_fd, FD_STDIN);
@@ -80,9 +78,11 @@ void	wait_child(void)
 void	pipe_function(t_cmd *cmd, char **envp)
 {
 	pid_t	pid;
+	t_cmd *og_cmd;
 	int		prev_read_fd;
 
 	prev_read_fd = -1;
+	og_cmd = cmd;
 	while (cmd)
 	{
 		if (cmd->heredocs)
@@ -112,5 +112,6 @@ void	pipe_function(t_cmd *cmd, char **envp)
 	}
 	if (prev_read_fd != -1)
 		close(prev_read_fd);
+	free_all_struct(og_cmd);
 	wait_child();
 }
