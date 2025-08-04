@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 16:43:06 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/04 11:42:23 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/04 12:00:46 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,29 +71,32 @@ char	**recup_full_cmd(t_cmd *cmd)
 	char	**full_cmd;
 	int		i;
 	int		j;
+	int		total_arg;
 
 	i = 0;
-	printf("\n0---------------------\n");
-	full_cmd = malloc(sizeof(char *) * (count_cmd_args(cmd) + 1));
-	if (full_cmd == NULL || full_cmd[0] == NULL)
+	total_arg = count_cmd_args(cmd);
+	if (total_arg == 0)
 		return (NULL);
-	printf("\n1---------------------\n");
+	full_cmd = malloc(sizeof(char *) * (total_arg + 1));
+	if (full_cmd == NULL)
+		return (NULL);
 	if (cmd->name)
-		full_cmd[i] = cmd->name;
-	i++;
+	{
+		full_cmd[i] = ft_strdup(cmd->name);
+		if (full_cmd[i] == NULL)
+			return (free_array(full_cmd), NULL);
+		i++;
+	}
 	j = 0;
-	printf("\n2---------------------\n");
 	while (cmd->args && cmd->args[j])
 	{
 		full_cmd[i] = ft_strdup(cmd->args[j]);
-		// if (full_cmd[i] == NULL)
-		//     break ;
+		if (full_cmd[i] == NULL)
+			return (free_array(full_cmd), NULL);
 		i++;
 		j++;
 	}
-	printf("\n3---------------------\n");
 	full_cmd[i] = NULL;
-	print_array(full_cmd);
 	return (full_cmd);
 }
 
