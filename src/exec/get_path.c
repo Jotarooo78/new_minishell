@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 16:43:06 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/04 12:00:46 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/04 13:45:49 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ bool	exe_my_cmd(t_cmd *cmd, char **envp)
 	full_cmd = NULL;
 	if (cmd->name)
 		full_cmd = recup_full_cmd(cmd);
-	if (full_cmd == NULL || full_cmd[0] == NULL)
+	if (full_cmd == NULL)
 		return (false);
 	if (access(full_cmd[0], F_OK | X_OK) == 0)
 		execve(full_cmd[0], full_cmd, envp);

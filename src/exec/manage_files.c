@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 14:52:39 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/04 12:36:10 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/04 13:48:46 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,11 +104,11 @@ void	manage_heredocs(t_cmd *cmd)
 			child_process_heredoc(cmd, heredoc, pipe_fd_h);
 		else
 			heredoc->heredoc_fd = parent_process_heredoc(pid, pipe_fd_h);
-		if (heredoc->heredoc_fd != -1)
-		{
-			close(heredoc->heredoc_fd);
-			heredoc->heredoc_fd = -1;	
-		}
+		// if (heredoc->heredoc_fd != -1)
+		// {
+		// 	close(heredoc->heredoc_fd);
+		// 	heredoc->heredoc_fd = -1;	
+		// }
 		heredoc = heredoc->next;
 	}
 }
