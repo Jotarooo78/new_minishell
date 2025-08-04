@@ -227,3 +227,66 @@ FD 9: CLOSED
 ==========
 id^M^M^M^M^M^M
 
+erreur avec frequence aleatoire : provenance des close_all_fd(old_fd) dans child_process_heredoc
+
+inishell> << e
+
+PARSED COMMANDS
+cmd 1:
+[NAME]: (null)
+[ARGS]: NULL
+[INFILE]: NULL
+[OUTFILE]: NULL
+[HEREDOC]:  << e
+[OUTPUT_TYPE]: STDOUT
+[INPUT_TYPE]: HEREDOC
+
+heredoc> e
+==85715== 
+==85715== FILE DESCRIPTORS: 3 open (3 std) at exit.
+==85715== 
+==85715== HEAP SUMMARY:
+==85715==     in use at exit: 208,268 bytes in 228 blocks
+==85715==   total heap usage: 446 allocs, 218 frees, 228,755 bytes allocated
+==85715== 
+==85715== LEAK SUMMARY:
+==85715==    definitely lost: 27 bytes in 2 blocks
+==85715==    indirectly lost: 0 bytes in 0 blocks
+==85715==      possibly lost: 0 bytes in 0 blocks
+==85715==    still reachable: 208,241 bytes in 226 blocks
+==85715==         suppressed: 0 bytes in 0 blocks
+==85715== Rerun with --leak-check=full to see details of leaked memory
+==85715== 
+==85715== For lists of detected and suppressed errors, rerun with: -s
+==85715== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+=== BEFORE redirections ===
+FD 0: OPEN
+FD 1: OPEN
+FD 2: OPEN
+FD 3: OPEN
+FD 4: OPEN
+FD 5: CLOSED
+FD 6: CLOSED
+FD 7: CLOSED
+FD 8: CLOSED
+FD 9: CLOSED
+==========
+
+ce child process a un syscall close sur un fd -1
+
+=== BEFORE execve ===
+FD 0: OPEN
+FD 1: OPEN
+FD 2: OPEN
+FD 3: OPEN
+FD 4: OPEN
+FD 5: CLOSED
+FD 6: CLOSED
+FD 7: CLOSED
+FD 8: CLOSED
+FD 9: CLOSED
+==========
+DEBUG: Restoring fd 3->0 and fd 4->1
+DEBUG: About to close old_fd 3 and 4
+DEBUG: old_fd closed
+minishell> 

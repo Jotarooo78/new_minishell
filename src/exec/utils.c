@@ -6,12 +6,30 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 14:47:40 by armosnie          #+#    #+#             */
-/*   Updated: 2025/07/28 14:52:23 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/04 11:39:01 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/exec.h"
 #include "../../includes/minishell.h"
+
+void	print_array(char **array)
+{
+	int i;
+	int j;
+	
+	i = 0;
+	while (array[i])
+	{
+		j = 0;
+		while (array[i][j])
+		{
+			printf("\ncmd %d ->%c\n", i, array[i][j]);
+			j++;
+		}
+		i++;
+	}
+}
 
 int	count_cmd(t_cmd *cmd)
 {
@@ -36,6 +54,8 @@ int	count_cmd_args(t_cmd *cmd)
 	
 	res = 0;
 	tmp = cmd;
+	if (tmp == NULL)
+		return (0);
 	while (tmp)
 	{
 		count_arg = 0;

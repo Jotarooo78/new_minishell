@@ -32,6 +32,8 @@ void					free_all_struct(t_cmd *cmd);
 void					close_all_fd(int *fd);
 int						count_cmd(t_cmd *cmd);
 int						count_cmd_args(t_cmd *cmd);
+void					print_array(char **array);
+
 // void					open_heredocs(t_cmd *cmd, int *pipe_fd);
 // void					manage_here_doc(t_cmd *cmd);
 

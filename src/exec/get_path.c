@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 16:43:06 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/03 16:50:48 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/04 11:42:23 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,13 +73,16 @@ char	**recup_full_cmd(t_cmd *cmd)
 	int		j;
 
 	i = 0;
+	printf("\n0---------------------\n");
 	full_cmd = malloc(sizeof(char *) * (count_cmd_args(cmd) + 1));
 	if (full_cmd == NULL || full_cmd[0] == NULL)
 		return (NULL);
+	printf("\n1---------------------\n");
 	if (cmd->name)
 		full_cmd[i] = cmd->name;
 	i++;
 	j = 0;
+	printf("\n2---------------------\n");
 	while (cmd->args && cmd->args[j])
 	{
 		full_cmd[i] = ft_strdup(cmd->args[j]);
@@ -88,7 +91,9 @@ char	**recup_full_cmd(t_cmd *cmd)
 		i++;
 		j++;
 	}
+	printf("\n3---------------------\n");
 	full_cmd[i] = NULL;
+	print_array(full_cmd);
 	return (full_cmd);
 }
 

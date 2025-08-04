@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:39:21 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/03 16:52:07 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/04 11:19:25 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	debug_fds(const char *label)
 void	child_call(t_cmd *cmd, char **envp)
 {
 	debug_fds("BEFORE redirections");
-	if (cmd->heredocs)
+	if (cmd->heredocs && cmd->heredocs->heredoc_fd != -1)
 	{
 		dup2(cmd->heredocs->heredoc_fd, FD_STDIN);
 		close(cmd->heredocs->heredoc_fd);
