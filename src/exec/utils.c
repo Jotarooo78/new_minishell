@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 14:47:40 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/04 11:39:01 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/04 15:29:54 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,4 +70,23 @@ int	count_cmd_args(t_cmd *cmd)
 		tmp = tmp->next;
 	}
 	return (res);
+}
+
+void	unused_heredoc_fd(t_cmd *current, t_cmd *cmd_list)
+{
+	t_cmd *tmp;
+	t_heredoc *heredoc;
+	
+	tmp = cmd_list;
+	heredoc = tmp->heredocs;
+	while (tmp != current && heredoc)
+	{
+		while (heredoc)
+		{
+			if (heredoc->heredoc_fd != -1)
+				close(heredoc->heredoc_fd);
+			heredoc = heredoc->next;
+		}
+		tmp = tmp->next;
+	}
 }

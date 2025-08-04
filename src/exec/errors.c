@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:22:59 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/04 15:07:54 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/04 15:14:25 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ void	free_files(t_cmd *cmd)
 			cmd->outfile = tmp;
 		}
 		free_heredocs(cmd->heredocs);
+		cmd = cmd->next;
 	}
 }
 

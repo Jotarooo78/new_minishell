@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:39:21 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/04 15:08:32 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/04 15:25:25 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,9 @@ void	debug_fds(const char *label)
 	fprintf(stderr, "==========\n");
 }
 
-void	child_call(t_cmd *cmd, char **envp, int prev_read_fd)
+void	child_call(t_cmd *cmd, t_cmd *cmd_list, char **envp, int prev_read_fd)
 {
+	unused_heredoc_fd(cmd, cmd_list);
 	if (cmd->heredocs && cmd->heredocs->heredoc_fd != -1)
 	{
 		dup2(cmd->heredocs->heredoc_fd, FD_STDIN);
@@ -78,11 +79,11 @@ void	wait_child(void)
 void	pipe_function(t_cmd *cmd, char **envp)
 {
 	pid_t	pid;
-	t_cmd *og_cmd;
+	t_cmd *cmd_list;
 	int		prev_read_fd;
 
 	prev_read_fd = -1;
-	og_cmd = cmd;
+	cmd_list = cmd;
 	while (cmd)
 	{
 		if (cmd->heredocs)
@@ -105,13 +106,12 @@ void	pipe_function(t_cmd *cmd, char **envp)
 			}
 		}
 		if (pid == 0)
-			child_call(cmd, envp, prev_read_fd);
+			child_call(cmd, cmd_list, envp, prev_read_fd);
 		else
 			prev_read_fd = parent_call(cmd, prev_read_fd);
 		cmd = cmd->next;
 	}
 	if (prev_read_fd != -1)
 		close(prev_read_fd);
-	free_all_struct(og_cmd);
 	wait_child();
 }
