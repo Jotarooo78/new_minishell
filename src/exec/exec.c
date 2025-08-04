@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:39:21 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/04 13:43:12 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/04 14:06:08 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	child_call(t_cmd *cmd, char **envp, int prev_read_fd)
 	exe_my_cmd(cmd, envp);
 }
 
-void	parent_call(t_cmd *cmd, int prev_read_fd)
+int	parent_call(t_cmd *cmd, int prev_read_fd)
 {
 	if (prev_read_fd != -1)
 		close(prev_read_fd);
@@ -66,6 +66,7 @@ void	parent_call(t_cmd *cmd, int prev_read_fd)
 	}
 	else
 		prev_read_fd = -1;
+	return (prev_read_fd);
 }
 
 void	wait_child(void)
@@ -86,6 +87,8 @@ void	pipe_function(t_cmd *cmd, char **envp)
 			manage_heredocs(cmd);
 		if (cmd->output_type == PIPEOUT && pipe(cmd->pipefd) == -1)
 		{
+			if (prev_read_fd != -1)
+				close(prev_read_fd);
 			error(cmd, "pipe failed", 1);
 		}
 		pid = fork();
@@ -102,7 +105,7 @@ void	pipe_function(t_cmd *cmd, char **envp)
 		if (pid == 0)
 			child_call(cmd, envp, prev_read_fd);
 		else
-			parent_call(cmd, prev_read_fd);
+			prev_read_fd = parent_call(cmd, prev_read_fd);
 		cmd = cmd->next;
 	}
 	if (prev_read_fd != -1)
