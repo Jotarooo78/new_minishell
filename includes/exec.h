@@ -23,7 +23,7 @@ char					**get_path(char **envp);
 void					free_array(char **split);
 void					open_infile(t_cmd *cmd);
 void					open_outfile(t_cmd *cmd);
-void					manage_heredocs(t_cmd *cmd, int *old_fd);
+void					manage_heredocs(t_cmd *cmd);
 void					pipe_function(t_cmd *cmd, char **envp);
 void					wait_child(void);
 bool					exe_my_cmd(t_cmd *cmd, char **envp);

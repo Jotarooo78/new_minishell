@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 14:52:39 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/04 11:25:12 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/04 12:36:10 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,10 @@ void	open_outfile(t_cmd *cmd)
 	}
 }
 
-void	child_process_heredoc(t_cmd *cmd, t_heredoc *heredoc, int *pipe_fd_h, int *old_fd)
+void	child_process_heredoc(t_cmd *cmd, t_heredoc *heredoc, int *pipe_fd_h)
 {
 	char	*line;
 
-	close_all_fd(old_fd);
 	close(pipe_fd_h[READ]);
 	while (1)
 	{
@@ -84,7 +83,7 @@ int	parent_process_heredoc(pid_t pid, int *pipe_fd_h)
 	return (pipe_fd_h[READ]);
 }
 
-void	manage_heredocs(t_cmd *cmd, int *old_fd)
+void	manage_heredocs(t_cmd *cmd)
 {
 	t_heredoc	*heredoc;
 	pid_t		pid;
@@ -102,7 +101,7 @@ void	manage_heredocs(t_cmd *cmd, int *old_fd)
 			error(cmd, "fork failed", 1);
 		}
 		if (pid == 0)
-			child_process_heredoc(cmd, heredoc, pipe_fd_h, old_fd);
+			child_process_heredoc(cmd, heredoc, pipe_fd_h);
 		else
 			heredoc->heredoc_fd = parent_process_heredoc(pid, pipe_fd_h);
 		if (heredoc->heredoc_fd != -1)
