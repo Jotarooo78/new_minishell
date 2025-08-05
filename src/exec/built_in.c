@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:48:50 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/05 17:03:07 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/05 17:14:45 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	bu_echo(t_cmd *cmd)
     int newline;
     int i = 1;
 
-    if (ft_strcmp(cmd->args[0], "\n") == 0)
+    if (ft_strcmp(cmd->args[1], "-n") == 0)
         newline = 0;
     else
         newline = 1;
