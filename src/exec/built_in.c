@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:48:50 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/05 17:14:45 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/05 17:22:22 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,16 @@ int	bu_echo(t_cmd *cmd)
     if (ft_strcmp(cmd->args[1], "-n") == 0)
         newline = 0;
     else
+    {
+        i = 2;
         newline = 1;
+    }
     while (cmd->args[i])
     {
         if (printf("%s", cmd->args[i]) < 0)
             return (1);
         if (cmd->args[i + 1])
-            if (printf("%s", cmd->args[i]) < 0)
+            if (printf(" ") < 0)
                 return (1);
         i++;
     }

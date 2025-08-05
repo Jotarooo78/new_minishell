@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:39:21 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/05 17:18:47 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/05 17:24:40 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,8 +125,11 @@ void execute_command(t_cmd *cmd, char **envp)
 {
 	if (is_built_in(cmd))
 	{
-		if (cmd->output_type == PIPEOUT || cmd->input_type == PIPEIN) // pq il rentre dans le if malgre la condition ?
+		if (cmd->output_type == PIPEOUT) // pq il rentre dans le if malgre la condition ?
+		{
+			printf("here");
 			pipe_function(cmd, envp);
+		}
 		else
 		{
 			parent_process_built_in(cmd, envp); // pour l'execution des commandes dans le parent process
