@@ -18,19 +18,45 @@
 
 typedef struct s_cmd	t_cmd;
 
-bool					is_built_in(char *cmd);
-char					**get_path(char **envp);
+// built-in
+
+int						child_process_built_in(t_cmd *cmd, char **envp);
+int						parent_process_built_in(t_cmd *cmd, char **envp);
+bool					is_built_in(t_cmd *cmd);
+int						bu_echo(t_cmd *cmd);
+int						bu_cd(t_cmd *cmd);
+int						bu_pwd(t_cmd *cmd);
+int						bu_export(t_cmd *cmd);
+int						bu_unset(t_cmd *cmd);
+int						bu_env(t_cmd *cmd, char **envp);
+int						bu_exit(t_cmd *cmd);
+
+// errors
+
 void					free_array(char **split);
+void					error(t_cmd *cmd, char *str, int code);
+void					free_all_struct(t_cmd *cmd);
+void					close_all_fd(int *fd);
+
+// exec
+
+void					unused_heredoc_fd(t_cmd *current, t_cmd *cmd_list);
+void					wait_child(void);
+void					pipe_function(t_cmd *cmd, char **envp);
+
+// get_path
+
+char					**get_path(char **envp);
+bool					exe_my_cmd(t_cmd *cmd, char **envp);
+
+// manage_files
+
 void					open_infile(t_cmd *cmd);
 void					open_outfile(t_cmd *cmd);
 void					manage_heredocs(t_cmd *cmd);
-void					pipe_function(t_cmd *cmd, char **envp);
-void					wait_child(void);
-bool					exe_my_cmd(t_cmd *cmd, char **envp);
-void					error(t_cmd *cmd, char *str, int code);
-void					unused_heredoc_fd(t_cmd *current, t_cmd *cmd_list);
-void					free_all_struct(t_cmd *cmd);
-void					close_all_fd(int *fd);
+
+// utils
+
 int						count_cmd(t_cmd *cmd);
 int						count_cmd_args(t_cmd *cmd);
 void					print_array(char **array);

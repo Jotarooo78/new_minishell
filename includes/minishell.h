@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:19:43 by messengu          #+#    #+#             */
-/*   Updated: 2025/08/03 18:32:08 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/05 17:02:10 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ typedef struct s_heredoc
 {
 	char				*delimiter;
 	char				*content;
-	int					expand_vars;
+	int 				expand_vars; // a implenter dans mon heredoc
 	int					heredoc_fd;
 	struct s_heredoc	*next;
 }						t_heredoc;
@@ -70,7 +70,7 @@ typedef struct s_cmd
 // ---- FUNCTIONS ----
 
 t_cmd					*parse(char *line);
-void					pipe_function(t_cmd *cmd, char **envp);
+void					execute_command(t_cmd *cmd, char **envp);
 void					print_cmd(t_cmd *cmd);
 int						check_cmds(t_cmd *cmd);
 t_cmd					*tokens_to_cmds(t_token *tokens);

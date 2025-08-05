@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:39:21 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/04 15:25:25 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/05 17:06:29 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,11 @@ void	debug_fds(const char *label)
 
 void	child_call(t_cmd *cmd, t_cmd *cmd_list, char **envp, int prev_read_fd)
 {
+	if (is_built_in(cmd))
+	{
+		child_process_built_in(cmd, envp);
+		exit(0);
+	}
 	unused_heredoc_fd(cmd, cmd_list);
 	if (cmd->heredocs && cmd->heredocs->heredoc_fd != -1)
 	{
@@ -114,4 +119,20 @@ void	pipe_function(t_cmd *cmd, char **envp)
 	if (prev_read_fd != -1)
 		close(prev_read_fd);
 	wait_child();
+}
+
+void execute_command(t_cmd *cmd, char **envp)
+{
+	if (is_built_in(cmd))
+	{
+		if (cmd->output_type == PIPEOUT || cmd->input_type == PIPEIN)
+			pipe_function(cmd, envp);
+		else
+		{
+			parent_process_built_in(cmd, envp); // pour l'execution des commandes dans le parent process
+			return ;
+		}
+	}
+	else
+		pipe_function(cmd, envp);
 }

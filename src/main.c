@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:54:53 by messengu          #+#    #+#             */
-/*   Updated: 2025/08/04 15:12:32 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/05 15:57:49 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,7 @@ int main(int argc, char **argv, char **envp)
 			break;
 		add_history(line);
 		cmd = parse(line);
-		// handle_signals(); ici les signaux ?
-		pipe_function(cmd, envp);
+		execute_command(cmd, envp);
 		free_all_struct(cmd);
 		free(line);
 	}
