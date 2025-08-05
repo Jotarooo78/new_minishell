@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quote_remover.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: messengu <messengu@student.42.f>           +#+  +:+       +#+        */
+/*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:27:29 by messengu          #+#    #+#             */
-/*   Updated: 2025/06/10 18:46:10 by messengu         ###   ########.fr       */
+/*   Updated: 2025/08/05 17:40:07 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,18 @@ static char	_handle_quotes(
 	char **start,
 	char **new_word)
 {
+	char *tmp_word;
+	
+	tmp_word = NULL;
 	if (!quote)
 		quote = *temp;
 	else if (quote == *temp)
 		quote = 0;
 	else if (quote != *temp)
 		return (quote);
-	*new_word = ft_strjoin(*new_word, ft_strndup(*start, temp - *start));
+	tmp_word = ft_strjoin(*new_word, ft_strndup(*start, temp - *start));
+	free(*new_word);
+	*new_word = tmp_word;
 	*start = temp + 1;
 	return (quote);
 }
@@ -51,8 +56,9 @@ char	*_remove_quotes(char *word)
 	char	quote;
 	char	*start;
 	char	*temp;
+	char 	*tmp_word;
 
-	new_word = ft_strdup("");
+	tmp_word = ft_strdup("");
 	quote = 0;
 	start = word;
 	temp = word;
@@ -62,7 +68,8 @@ char	*_remove_quotes(char *word)
 			quote = _handle_quotes(temp, quote, &start, &new_word);
 		temp++;
 	}
-	new_word = ft_strjoin(new_word, ft_strndup(start, temp - start));
+	new_word = ft_strjoin(tmp_word, ft_strndup(start, temp - start));
+	free(tmp_word);
 	return (new_word);
 }
 
