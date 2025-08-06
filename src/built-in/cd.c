@@ -6,20 +6,37 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 15:19:43 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/06 17:12:42 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/06 17:27:38 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/exec.h"
 #include "../../includes/minishell.h"
 
-int    get_env(void)
+int    get_home(void)
 {
     char *path;
 
     path = ft_strdup(getenv("HOME"));
     if (path == NULL)
         return (1);
+    if (chdir(path) == -1)
+    {
+        free(path);
+        return (1);
+    }
+    free(path);
+    return (0);
+}
+
+int    get_precedente_path(void)
+{
+    char *path;
+
+    path = ft_strdup(getenv());
+    if (path == NULL)
+        return (1);
+    
     if (chdir(path) == -1)
     {
         free(path);
@@ -41,15 +58,19 @@ int	built_in_cd(t_cmd *cmd)
     }
 	else if (len == 0 || ((ft_strncmp(cmd->args[0], "~", 1) == 0 && len == 1)))
 	{
-        if (get_env() == 0)
+        if (get_home() == 0)
             return (0);
-        else
-            return (1);
+        return (1);
 	}
+    else if (ft_strncmp(cmd->args[0], "..", 2) == 0 && len == 1)
+    {
+        if (get_precedente_path() == 0)
+            return (0);
+    }
 	else
         if (chdir(cmd->args[0]) == -1)
         {
-            perror("No such file or directory");            
+            perror("cd");            
             return (1);
         }
     return (0);
