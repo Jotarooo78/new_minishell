@@ -470,3 +470,20 @@ cmd 1:
 
 armand
 minishell> 
+
+
+integrer les expanse dans mes built in :
+
+minishell> echo $?
+
+PARSED COMMANDS
+cmd 1:
+[NAME]: echo
+[ARGS]: $?
+[INFILE]: NULL
+[OUTFILE]: NULL
+[HEREDOC]: NULL
+[OUTPUT_TYPE]: STDOUT
+[INPUT_TYPE]: STDIN
+
+$?

@@ -22,14 +22,14 @@ SRCS = \
 	src/exec/get_path.c \
 	src/exec/manage_files.c \
 	src/exec/utils.c \
-	src/built_in/built_in.c \
-	src/built_in/cd.c \
-	src/built_in/echo.c \
-	src/built_in/env.c \
-	src/built_in/exit.c \
-	src/built_in/export.c \
-	src/built_in/pwd.c \
-	src/built_in/unset.c \
+	src/built-in/built_in.c \
+	src/built-in/cd.c \
+	src/built-in/echo.c \
+	src/built-in/env.c \
+	src/built-in/exit.c \
+	src/built-in/export.c \
+	src/built-in/pwd.c \
+	src/built-in/unset.c \
 	
 OBJ_DIR = obj
 DEP_DIR = $(OBJ_DIR)
