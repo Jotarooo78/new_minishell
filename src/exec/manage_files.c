@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 14:52:39 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/05 14:28:37 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/06 14:24:08 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	child_process_heredoc(t_cmd *cmd, t_heredoc *heredoc, int *pipe_fd_h)
 		if (line == NULL)
 		exit(1);
 		if (ft_strncmp(heredoc->delimiter, line, ft_strlen(line)) == 0)
-		break ;
+			break ;
 		write(pipe_fd_h[WRITE], line, ft_strlen(line));
 		write(pipe_fd_h[WRITE], "\n", 1);
 		free(line);

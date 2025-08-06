@@ -17,13 +17,20 @@ SRCS = \
 	src/parsing/quote_remover.c \
 	src/parsing/cmd_checker.c \
 	src/parsing/tokens_to_cmds.c \
-	src/exec/built_in.c\
-	src/exec/errors.c\
-	src/exec/exec.c\
-	src/exec/get_path.c\
-	src/exec/manage_files.c\
-	src/exec/utils.c\
-
+	src/exec/errors.c \
+	src/exec/exec.c \
+	src/exec/get_path.c \
+	src/exec/manage_files.c \
+	src/exec/utils.c \
+	src/built_in/built_in.c \
+	src/built_in/cd.c \
+	src/built_in/echo.c \
+	src/built_in/env.c \
+	src/built_in/exit.c \
+	src/built_in/export.c \
+	src/built_in/pwd.c \
+	src/built_in/unset.c \
+	
 OBJ_DIR = obj
 DEP_DIR = $(OBJ_DIR)
 OBJS = $(SRCS:src/%.c=$(OBJ_DIR)/%.o)

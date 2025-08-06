@@ -1,3 +1,11 @@
+//////////////////////////////////////////////////////////////////////////////////////////////
+//                                                                                          //
+//                                                                                          //
+//                                        PARCING                                           //
+//                                                                                          //
+//                                                                                          //
+//////////////////////////////////////////////////////////////////////////////////////////////
+
 heredoc: a faire dans le parsing, au meme moment que la verification de la syntaxe
 
 bash-5.1$ << asd wer
@@ -108,8 +116,40 @@ heredoc> sgrjpgrj
 heredoc> q1
 minishell> 
 
-exec :
+minishell> echo armand
 
+PARSED COMMANDS
+cmd 1:
+[NAME]: echo
+[ARGS]: armand
+[INFILE]: NULL
+[OUTFILE]: NULL
+[HEREDOC]: NULL
+[OUTPUT_TYPE]: STDOUT
+[INPUT_TYPE]: STDIN
+
+==60764== Invalid read of size 1
+==60764==    at 0x40488C: ft_strcmp (in /home/armosnie/42/3_circle/new_minishell/minishell)
+==60764==    by 0x403373: is_built_in (built_in.c:47)
+==60764==    by 0x403C98: execute_command (exec.c:126)
+==60764==    by 0x4012D0: main (main.c:30)
+==60764==  Address 0x4b642f5 is 0 bytes after a block of size 5 alloc'd
+==60764==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==60764==    by 0x404CD7: ft_strjoin (in /home/armosnie/42/3_circle/new_minishell/minishell)
+==60764==    by 0x4025F2: _remove_quotes (quote_remover.c:65)
+==60764==    by 0x40272F: remove_quotes (quote_remover.c:84)
+==60764==    by 0x40136E: parse (parser.c:40)
+==60764==    by 0x4012BF: main (main.c:29)
+
+comparaison foireuse car \0 pas mis a la fin de la commande echo alors que ft_strcmp fait la cmp avec i guess
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+//                                                                                          //
+//                                                                                          //
+//                                        EXECUTABLE                                        //
+//                                                                                          //
+//                                                                                          //
+//////////////////////////////////////////////////////////////////////////////////////////////
 minishell> grep a < ftext
 
 PARSED COMMANDS
@@ -374,7 +414,59 @@ command not found: Bad file descriptor
 ==20362== For lists of detected and suppressed errors, rerun with: -s
 ==20362== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
 
+une comparaison avec un invalid read of size 8 + segfault facilement :
 
-MODIFICATION DE _REMOVE_QUOTES ET _HANDLE_QUOTES
+minishell> echo armand
 
-ajout d'un char *tmp pour free correctement les char * avant leur nouvelle attribution
+PARSED COMMANDS
+cmd 1:
+[NAME]: echo
+[ARGS]: armand
+[INFILE]: NULL
+[OUTFILE]: NULL
+[HEREDOC]: NULL
+[OUTPUT_TYPE]: STDOUT
+[INPUT_TYPE]: STDIN
+
+==63307== Invalid read of size 8
+==63307==    at 0x40326A: built_in_echo (built_in.c:28)
+==63307==    by 0x403513: parent_process_built_in (built_in.c:71)
+==63307==    by 0x403D34: execute_command (exec.c:136)
+==63307==    by 0x4012D0: main (main.c:30)
+==63307==  Address 0x4b64120 is 0 bytes after a block of size 16 alloc'd
+==63307==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==63307==    by 0x402C45: tokens_to_cmds (tokens_to_cmds.c:75)
+==63307==    by 0x401350: parse (parser.c:37)
+==63307==    by 0x4012BF: main (main.c:29)
+==63307== 
+parent
+
+probleme d'echo 
+
+minishell> echo armand
+
+PARSED COMMANDS
+cmd 1:
+[NAME]: echo
+[ARGS]: armand
+[INFILE]: NULL
+[OUTFILE]: NULL
+[HEREDOC]: NULL
+[OUTPUT_TYPE]: STDOUT
+[INPUT_TYPE]: STDIN
+
+
+minishell> echo armand armand
+
+PARSED COMMANDS
+cmd 1:
+[NAME]: echo
+[ARGS]: armand armand
+[INFILE]: NULL
+[OUTFILE]: NULL
+[HEREDOC]: NULL
+[OUTPUT_TYPE]: STDOUT
+[INPUT_TYPE]: STDIN
+
+armand
+minishell> 

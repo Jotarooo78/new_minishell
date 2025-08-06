@@ -6,29 +6,29 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:39:21 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/05 17:24:40 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/06 14:43:41 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/exec.h"
 #include "../../includes/minishell.h"
 
-void	debug_fds(const char *label)
-{
-	fprintf(stderr, "=== %s ===\n", label);
-	for (int i = 0; i < 10; i++)
-	{
-		if (fcntl(i, F_GETFD) != -1)
-		{
-			fprintf(stderr, "FD %d: OPEN\n", i);
-		}
-		else
-		{
-			fprintf(stderr, "FD %d: CLOSED\n", i);
-		}
-	}
-	fprintf(stderr, "==========\n");
-}
+// void	debug_fds(const char *label)
+// {
+// 	fprintf(stderr, "=== %s ===\n", label);
+// 	for (int i = 0; i < 10; i++)
+// 	{
+// 		if (fcntl(i, F_GETFD) != -1)
+// 		{
+// 			fprintf(stderr, "FD %d: OPEN\n", i);
+// 		}
+// 		else
+// 		{
+// 			fprintf(stderr, "FD %d: CLOSED\n", i);
+// 		}
+// 	}
+// 	fprintf(stderr, "==========\n");
+// }
 
 void	child_call(t_cmd *cmd, t_cmd *cmd_list, char **envp, int prev_read_fd)
 {
@@ -125,11 +125,8 @@ void execute_command(t_cmd *cmd, char **envp)
 {
 	if (is_built_in(cmd))
 	{
-		if (cmd->output_type == PIPEOUT) // pq il rentre dans le if malgre la condition ?
-		{
-			printf("here");
+		if (cmd->output_type == PIPEOUT)
 			pipe_function(cmd, envp);
-		}
 		else
 		{
 			parent_process_built_in(cmd, envp); // pour l'execution des commandes dans le parent process

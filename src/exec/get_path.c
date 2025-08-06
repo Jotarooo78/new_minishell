@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 16:43:06 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/04 13:45:49 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/06 14:46:18 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ char	**recup_full_cmd(t_cmd *cmd)
 	int		total_arg;
 
 	i = 0;
-	total_arg = count_cmd_args(cmd);
+	total_arg = count_all_cmd_args(cmd);
 	if (total_arg == 0)
 		return (NULL);
 	full_cmd = malloc(sizeof(char *) * (total_arg + 1));

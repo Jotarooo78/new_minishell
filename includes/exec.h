@@ -3,6 +3,7 @@
 
 # include "../libft/libft.h"
 # include "minishell.h"
+// # include <dirent.h>
 # include <fcntl.h>
 # include <stdbool.h>
 # include <stdio.h>
@@ -23,13 +24,13 @@ typedef struct s_cmd	t_cmd;
 int						child_process_built_in(t_cmd *cmd, char **envp);
 int						parent_process_built_in(t_cmd *cmd, char **envp);
 bool					is_built_in(t_cmd *cmd);
-int						bu_echo(t_cmd *cmd);
-int						bu_cd(t_cmd *cmd);
-int						bu_pwd(t_cmd *cmd);
-int						bu_export(t_cmd *cmd);
-int						bu_unset(t_cmd *cmd);
-int						bu_env(t_cmd *cmd, char **envp);
-int						bu_exit(t_cmd *cmd);
+int						built_in_echo(t_cmd *cmd);
+int						built_in_cd(t_cmd *cmd);
+int						built_in_pwd(t_cmd *cmd);
+int						built_in_export(t_cmd *cmd);
+int						built_in_unset(t_cmd *cmd);
+int						built_in_env(t_cmd *cmd, char **envp);
+int						built_in_exit(t_cmd *cmd);
 
 // errors
 
@@ -58,7 +59,8 @@ void					manage_heredocs(t_cmd *cmd);
 // utils
 
 int						count_cmd(t_cmd *cmd);
-int						count_cmd_args(t_cmd *cmd);
+int						count_args(t_cmd *cmd);
+int						count_all_cmd_args(t_cmd *cmd);
 void					print_array(char **array);
 
 #endif
