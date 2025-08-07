@@ -487,3 +487,14 @@ cmd 1:
 [INPUT_TYPE]: STDIN
 
 $?
+
+
+armosnie@f6r13s3:~/42/3_circle/new_minishell$ echo $?
+0
+armosnie@f6r13s3:~/42/3_circle/new_minishell$ bash --posix
+bash-5.1$ exit sggsf
+exit
+bash: exit: sggsf: numeric argument required
+armosnie@f6r13s3:~/42/3_circle/new_minishell$ echo $?
+2
+armosnie@f6r13s3:~/42/3_circle/new_minishell$ 
