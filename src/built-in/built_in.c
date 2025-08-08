@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:48:50 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/06 15:20:31 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/08 17:21:06 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,22 +38,21 @@ int	parent_process_built_in(t_cmd *cmd, char **envp)
 {
     int code_error;
 
-    (void)envp;
     code_error = 0;
 	if (ft_strncmp(cmd->name, "echo", 4) == 0)
 		code_error = built_in_echo(cmd);
 	if (ft_strncmp(cmd->name, "cd", 2) == 0)
 		code_error = built_in_cd(cmd);
-	// if (ft_strncmp(cmd->name, "pwd", 3) == 0)
-	// 	code_error = built_in_pwd(cmd);
+	if (ft_strncmp(cmd->name, "pwd", 3) == 0)
+		code_error = built_in_pwd(cmd);
 	// if (ft_strncmp(cmd->name, "export", 6) == 0)
 	// 	code_error = built_in_export(cmd);
 	// if (ft_strncmp(cmd->name, "unset", 5) == 0)
 	// 	code_error =  built_in_unset(cmd);
-	// if (ft_strncmp(cmd->name, "env", 3) == 0)
-	// 	code_error = built_in_env(cmd, envp);
-	// if (ft_strncmp(cmd->name, "exit", 4) == 0)
-	//     code_error = built_in_exit(cmd);
+	if (ft_strncmp(cmd->name, "env", 3) == 0)
+		code_error = built_in_env(cmd, envp);
+	if (ft_strncmp(cmd->name, "exit", 4) == 0)
+	    code_error = built_in_exit(cmd);
     return (code_error);
 }
 
@@ -61,21 +60,20 @@ int	child_process_built_in(t_cmd *cmd, char **envp)
 {
     int code_error;
 
-    (void)envp;
     code_error = 0;
 	if (ft_strncmp(cmd->name, "echo", 4) == 0)
 		code_error = built_in_echo(cmd);
 	if (ft_strncmp(cmd->name, "cd", 2) == 0)
 		code_error = built_in_cd(cmd);
-	// if (ft_strncmp(cmd->name, "pwd", 3) == 0)
-	// 	code_error = built_in_pwd(cmd);
+	if (ft_strncmp(cmd->name, "pwd", 3) == 0)
+		code_error = built_in_pwd(cmd);
 	// if (ft_strncmp(cmd->name, "export", 6) == 0)
 	// 	code_error = built_in_export(cmd);
 	// if (ft_strncmp(cmd->name, "unset", 5) == 0)
 	// 	code_error =  built_in_unset(cmd);
-	// if (ft_strncmp(cmd->name, "env", 3) == 0)
-	// 	code_error = built_in_env(cmd, envp);
-	// if (ft_strncmp(cmd->name, "exit", 4) == 0)
-	//     code_error = built_in_exit(cmd);
+	if (ft_strncmp(cmd->name, "env", 3) == 0)
+		code_error = built_in_env(cmd, envp);
+	if (ft_strncmp(cmd->name, "exit", 4) == 0)
+	    code_error = built_in_exit(cmd);
     return (code_error);
 }

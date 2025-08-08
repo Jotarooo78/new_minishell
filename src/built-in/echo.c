@@ -6,12 +6,15 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 15:19:26 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/06 15:19:40 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/08 16:19:25 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/exec.h"
 #include "../../includes/minishell.h"
+
+
+// enpand $? a faire
 
 int	built_in_echo(t_cmd *cmd)
 {

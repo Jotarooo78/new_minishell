@@ -143,6 +143,8 @@ cmd 1:
 
 comparaison foireuse car \0 pas mis a la fin de la commande echo alors que ft_strcmp fait la cmp avec i guess
 
+gerer echo $? en tant qu'expand pour les erreurs
+
 //////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                                          //
 //                                                                                          //
@@ -471,24 +473,6 @@ cmd 1:
 armand
 minishell> 
 
-
-integrer les expanse dans mes built in :
-
-minishell> echo $?
-
-PARSED COMMANDS
-cmd 1:
-[NAME]: echo
-[ARGS]: $?
-[INFILE]: NULL
-[OUTFILE]: NULL
-[HEREDOC]: NULL
-[OUTPUT_TYPE]: STDOUT
-[INPUT_TYPE]: STDIN
-
-$?
-
-
 armosnie@f6r13s3:~/42/3_circle/new_minishell$ echo $?
 0
 armosnie@f6r13s3:~/42/3_circle/new_minishell$ bash --posix
@@ -498,3 +482,8 @@ bash: exit: sggsf: numeric argument required
 armosnie@f6r13s3:~/42/3_circle/new_minishell$ echo $?
 2
 armosnie@f6r13s3:~/42/3_circle/new_minishell$ 
+
+
+gerer echo $? c'est un expand
+
+gerer les built-in et expand dans le heredoc

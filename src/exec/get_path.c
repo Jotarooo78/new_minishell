@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 16:43:06 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/06 14:46:18 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/08 17:42:02 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,11 +117,13 @@ bool	exe_my_cmd(t_cmd *cmd, char **envp)
 	{
 		free_array(full_cmd);
 		free_array(path);
+		cmd->exit_status = 127;
 		error(cmd, "env error", 127);
 	}
 	exec(full_cmd[0], full_cmd, path, envp);
 	free_array(path);
 	free_array(full_cmd);
+	cmd->exit_status = 127;
 	error(cmd, "command not found", 127);
 	return (false);
 }

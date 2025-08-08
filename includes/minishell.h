@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:19:43 by messengu          #+#    #+#             */
-/*   Updated: 2025/08/05 17:02:10 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/08 17:20:08 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ typedef struct s_cmd
 	char				*name;
 	char				**args;
 	int					pipefd[2];
+	int					exit_status;
 	t_file				*infile;
 	t_file				*outfile;
 	t_input_type		input_type;
