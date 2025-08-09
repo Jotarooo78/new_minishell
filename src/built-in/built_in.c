@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:48:50 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/08 17:21:06 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/09 14:12:02 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	parent_process_built_in(t_cmd *cmd, char **envp)
 	if (ft_strncmp(cmd->name, "env", 3) == 0)
 		code_error = built_in_env(cmd, envp);
 	if (ft_strncmp(cmd->name, "exit", 4) == 0)
-	    code_error = built_in_exit(cmd);
+	    code_error = built_in_exit(cmd, code_error);
     return (code_error);
 }
 
@@ -74,6 +74,6 @@ int	child_process_built_in(t_cmd *cmd, char **envp)
 	if (ft_strncmp(cmd->name, "env", 3) == 0)
 		code_error = built_in_env(cmd, envp);
 	if (ft_strncmp(cmd->name, "exit", 4) == 0)
-	    code_error = built_in_exit(cmd);
+	    code_error = built_in_exit(cmd, code_error);
     return (code_error);
 }

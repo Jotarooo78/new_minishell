@@ -6,12 +6,24 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 14:47:40 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/06 14:50:34 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/09 14:22:14 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/exec.h"
 #include "../../includes/minishell.h"
+
+void	init_pidarray(t_cmd *cmd)
+{
+	int i;
+
+	i = 0;
+	while (i < MAX_PROCESSES)
+	{
+		cmd->pid[i] = 0;
+		i++;
+	}
+}
 
 void	print_array(char **array)
 {

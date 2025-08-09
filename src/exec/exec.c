@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:39:21 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/06 14:43:41 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/09 14:36:32 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,20 +75,40 @@ int	parent_call(t_cmd *cmd, int prev_read_fd)
 	return (prev_read_fd);
 }
 
-void	wait_child(void)
+void	wait_child(t_cmd *cmd)
 {
-	while (wait(NULL) > 0)
-		;
+	int i;
+	
+	i = 0;
+	while (cmd->pid[i])
+	{
+		waitpid(cmd->pid[i], NULL, 0);
+		i++;
+	}
 }
 
-void	pipe_function(t_cmd *cmd, char **envp)
+void	pid_check(t_cmd *cmd, int i, int prev_read_fd)
 {
-	pid_t	pid;
-	t_cmd *cmd_list;
+	cmd->pid[i] = fork();
+	if (cmd->pid == -1)
+	{
+		if (prev_read_fd != -1)
+			close(prev_read_fd);
+		if (cmd->output_type == PIPEOUT)
+		{
+			close_all_fd(cmd->pipefd);
+			error(cmd, "fork failed", 1);
+		}
+	}
+}
+
+void	pipe_function(t_cmd *cmd, t_cmd *cmd_list, char **envp)
+{
 	int		prev_read_fd;
+	int i;
 
 	prev_read_fd = -1;
-	cmd_list = cmd;
+	i = 0;
 	while (cmd)
 	{
 		if (cmd->heredocs)
@@ -99,18 +119,8 @@ void	pipe_function(t_cmd *cmd, char **envp)
 				close(prev_read_fd);
 			error(cmd, "pipe failed", 1);
 		}
-		pid = fork();
-		if (pid == -1)
-		{
-			if (prev_read_fd != -1)
-				close(prev_read_fd);
-			if (cmd->output_type == PIPEOUT)
-			{
-				close_all_fd(cmd->pipefd);
-				error(cmd, "fork failed", 1);
-			}
-		}
-		if (pid == 0)
+		pid_check(cmd, i, prev_read_fd);
+		if (cmd->pid == 0)
 			child_call(cmd, cmd_list, envp, prev_read_fd);
 		else
 			prev_read_fd = parent_call(cmd, prev_read_fd);
@@ -118,15 +128,16 @@ void	pipe_function(t_cmd *cmd, char **envp)
 	}
 	if (prev_read_fd != -1)
 		close(prev_read_fd);
-	wait_child();
+	wait_child(cmd);
 }
 
-void execute_command(t_cmd *cmd, char **envp)
+void execute_command(t_cmd *cmd, t_cmd *cmd_list, char **envp)
 {
+	init_pidarray(cmd);
 	if (is_built_in(cmd))
 	{
 		if (cmd->output_type == PIPEOUT)
-			pipe_function(cmd, envp);
+			pipe_function(cmd, cmd_list, envp);
 		else
 		{
 			parent_process_built_in(cmd, envp); // pour l'execution des commandes dans le parent process

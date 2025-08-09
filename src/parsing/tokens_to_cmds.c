@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 15:12:25 by messengu          #+#    #+#             */
-/*   Updated: 2025/08/08 17:20:39 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/09 14:20:12 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void	init_cmd(t_cmd *cmd)
 	cmd->pipefd[0] = -1;
 	cmd->pipefd[1] = -1;
 	cmd->exit_status = 0;
+	cmd->pid[MAX_PROCESSES] = 0;
 	cmd->infile = NULL;
 	cmd->outfile = NULL;
 	cmd->next = NULL;

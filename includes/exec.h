@@ -16,6 +16,7 @@
 # define FD_STDOUT 1
 # define READ 0
 # define WRITE 1
+# define MAX_PROCESSES 256
 
 typedef struct s_cmd	t_cmd;
 
@@ -30,7 +31,7 @@ int						built_in_pwd(t_cmd *cmd);
 int						built_in_export(t_cmd *cmd);
 int						built_in_unset(t_cmd *cmd);
 int						built_in_env(t_cmd *cmd, char **envp);
-int						built_in_exit(t_cmd *cmd);
+int						built_in_exit(t_cmd *cmd, int status);
 
 // errors
 
@@ -58,6 +59,7 @@ void					manage_heredocs(t_cmd *cmd);
 
 // utils
 
+void					init_pidarray(t_cmd *cmd);
 int						count_cmd(t_cmd *cmd);
 int						count_args(t_cmd *cmd);
 int						count_all_cmd_args(t_cmd *cmd);

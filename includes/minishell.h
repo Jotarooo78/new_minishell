@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:19:43 by messengu          #+#    #+#             */
-/*   Updated: 2025/08/08 17:20:08 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/09 14:33:32 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ typedef struct s_cmd
 	char				**args;
 	int					pipefd[2];
 	int					exit_status;
+	pid_t				*pid;
 	t_file				*infile;
 	t_file				*outfile;
 	t_input_type		input_type;
@@ -71,7 +72,7 @@ typedef struct s_cmd
 // ---- FUNCTIONS ----
 
 t_cmd					*parse(char *line);
-void					execute_command(t_cmd *cmd, char **envp);
+void					execute_command(cmd, cmd_list, envp);
 void					print_cmd(t_cmd *cmd);
 int						check_cmds(t_cmd *cmd);
 t_cmd					*tokens_to_cmds(t_token *tokens);
