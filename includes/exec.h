@@ -16,7 +16,6 @@
 # define FD_STDOUT 1
 # define READ 0
 # define WRITE 1
-# define MAX_PROCESSES 256
 
 typedef struct s_cmd	t_cmd;
 

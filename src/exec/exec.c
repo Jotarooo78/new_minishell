@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:39:21 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/09 14:36:32 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/09 14:44:38 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ void	wait_child(t_cmd *cmd)
 void	pid_check(t_cmd *cmd, int i, int prev_read_fd)
 {
 	cmd->pid[i] = fork();
-	if (cmd->pid == -1)
+	if (cmd->pid[i] == -1)
 	{
 		if (prev_read_fd != -1)
 			close(prev_read_fd);
@@ -120,7 +120,7 @@ void	pipe_function(t_cmd *cmd, t_cmd *cmd_list, char **envp)
 			error(cmd, "pipe failed", 1);
 		}
 		pid_check(cmd, i, prev_read_fd);
-		if (cmd->pid == 0)
+		if (cmd->pid[i] == 0)
 			child_call(cmd, cmd_list, envp, prev_read_fd);
 		else
 			prev_read_fd = parent_call(cmd, prev_read_fd);
@@ -133,7 +133,7 @@ void	pipe_function(t_cmd *cmd, t_cmd *cmd_list, char **envp)
 
 void execute_command(t_cmd *cmd, t_cmd *cmd_list, char **envp)
 {
-	init_pidarray(cmd);
+	// init_pidarray(cmd);
 	if (is_built_in(cmd))
 	{
 		if (cmd->output_type == PIPEOUT)
@@ -145,5 +145,5 @@ void execute_command(t_cmd *cmd, t_cmd *cmd_list, char **envp)
 		}
 	}
 	else
-		pipe_function(cmd, envp);
+		pipe_function(cmd, cmd_list, envp);
 }
