@@ -487,3 +487,19 @@ armosnie@f6r13s3:~/42/3_circle/new_minishell$
 gerer echo $? c'est un expand
 
 gerer les built-in et expand dans le heredoc
+
+minishell> exit -- qwqdf
+
+PARSED COMMANDS
+cmd 1:
+[NAME]: exit
+[ARGS]: -- qwqdf
+[INFILE]: NULL
+[OUTFILE]: NULL
+[HEREDOC]: NULL
+[OUTPUT_TYPE]: STDOUT
+[INPUT_TYPE]: STDIN
+
+exit: Success
+
+je ne comprends pas a debug lol

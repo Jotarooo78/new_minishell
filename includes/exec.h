@@ -21,8 +21,9 @@ typedef struct s_cmd	t_cmd;
 
 // built-in utils
 
-long					ft_atol(char *str);
-int						is_digit(char *str);
+long long	ft_atoll(char *str);
+int check_long(char *str);
+int is_valid_number(char *str);
 
 // built-in
 
