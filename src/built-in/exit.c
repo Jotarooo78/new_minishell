@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 15:19:54 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/11 15:26:16 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/11 20:33:02 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ int	is_valid_number(char *str)
 	{
 		while (str[i] == 32)
 			i++;
-		if (ft_isdigit(str[i]) == 0 && (str[i] != '-' || str[i] != '+'))
+		if (ft_isdigit(str[i]) == 0 && str[i] != '-' && str[i] != '+'
+			&& str[i] != 32) // no option
 			return (2);
 		if (str[i] == '-' || str[i] == '+')
 		{

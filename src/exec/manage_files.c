@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 14:52:39 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/06 14:24:08 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/11 20:46:11 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,11 @@ void	open_outfile(t_cmd *cmd)
 	}
 }
 
+char	*change_into_vars(char *line)
+{
+	while ()
+}
+
 void	child_process_heredoc(t_cmd *cmd, t_heredoc *heredoc, int *pipe_fd_h)
 {
 	char	*line;
@@ -66,6 +71,8 @@ void	child_process_heredoc(t_cmd *cmd, t_heredoc *heredoc, int *pipe_fd_h)
 		exit(1);
 		if (ft_strncmp(heredoc->delimiter, line, ft_strlen(line)) == 0)
 			break ;
+		if (heredoc->expand_vars)
+			line = change_into_vars(line);
 		write(pipe_fd_h[WRITE], line, ft_strlen(line));
 		write(pipe_fd_h[WRITE], "\n", 1);
 		free(line);

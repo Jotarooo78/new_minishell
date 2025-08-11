@@ -488,18 +488,25 @@ gerer echo $? c'est un expand
 
 gerer les built-in et expand dans le heredoc
 
-minishell> exit -- qwqdf
+armosnie@f4r2s8:~/42/3_circle/new_minishell$ exit -- 234
+exit
+➜  new_minishell git:(main) ✗ echo $?
+234
+
+minishell> exit -- 234
 
 PARSED COMMANDS
 cmd 1:
 [NAME]: exit
-[ARGS]: -- qwqdf
+[ARGS]: -- 234
 [INFILE]: NULL
 [OUTFILE]: NULL
 [HEREDOC]: NULL
 [OUTPUT_TYPE]: STDOUT
 [INPUT_TYPE]: STDIN
 
-exit: Success
+➜  new_minishell git:(main) ✗ echo $?                                                  
+2
+
 
 je ne comprends pas a debug lol
