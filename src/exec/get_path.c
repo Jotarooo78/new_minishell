@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 16:43:06 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/09 17:00:08 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/12 20:30:27 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ char	**recup_full_cmd(t_cmd *cmd)
 	return (full_cmd);
 }
 
-bool	exe_my_cmd(t_cmd *cmd, char **envp)
+bool	exe_my_cmd(t_cmd *cmd, t_env *env)
 {
 	char	**path;
 	char	**full_cmd;
@@ -111,8 +111,8 @@ bool	exe_my_cmd(t_cmd *cmd, char **envp)
 	if (full_cmd == NULL)
 		return (false);
 	if (access(full_cmd[0], F_OK | X_OK) == 0)
-		execve(full_cmd[0], full_cmd, envp);
-	path = get_path(envp);
+		execve(full_cmd[0], full_cmd, env->env);
+	path = get_path(env->env);
 	if (path == NULL)
 	{
 		free_array(full_cmd);
@@ -120,7 +120,7 @@ bool	exe_my_cmd(t_cmd *cmd, char **envp)
 		// cmd->exit_status = 127;
 		error(cmd, "env error", 127);
 	}
-	exec(full_cmd[0], full_cmd, path, envp);
+	exec(full_cmd[0], full_cmd, path, env->env);
 	free_array(path);
 	free_array(full_cmd);
 	// cmd->exit_status = 127;

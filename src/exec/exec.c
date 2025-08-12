@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:39:21 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/11 15:26:26 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/12 20:29:04 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,13 @@
 // 	fprintf(stderr, "==========\n");
 // }
 
-void	child_call(t_cmd *cmd, t_cmd *cmd_list, char **envp, int prev_read_fd)
+void	child_call(t_cmd *cmd, t_cmd *cmd_list, t_env *env, int prev_read_fd)
 {
 	int	exit_status;
 
 	if (is_built_in(cmd))
 	{
-		exit_status = child_process_built_in(cmd, envp);
+		exit_status = child_process_built_in(cmd, env);
 		exit(exit_status);
 	}
 	unused_heredoc_fd(cmd, cmd_list);
@@ -60,7 +60,7 @@ void	child_call(t_cmd *cmd, t_cmd *cmd_list, char **envp, int prev_read_fd)
 		dup2(cmd->pipefd[WRITE], FD_STDOUT);
 		close(cmd->pipefd[WRITE]);
 	}
-	exe_my_cmd(cmd, envp);
+	exe_my_cmd(cmd, env);
 }
 
 int	parent_call(t_cmd *cmd, int prev_read_fd)
@@ -115,7 +115,7 @@ void	pidarray_check(t_cmd *cmd, pid_t *pid, int prev_read_fd, int i)
 	}
 }
 
-int	pipe_function(t_cmd *cmd, pid_t *pid, int exit_status, char **envp)
+int	pipe_function(t_cmd *cmd, pid_t *pid, int exit_status, t_env *env)
 {
 	t_cmd	*cmd_list;
 	int		prev_read_fd;
@@ -132,7 +132,7 @@ int	pipe_function(t_cmd *cmd, pid_t *pid, int exit_status, char **envp)
 		pid[i] = fork();
 		pidarray_check(cmd, pid, prev_read_fd, i);
 		if (pid[i] == 0)
-			child_call(cmd, cmd_list, envp, prev_read_fd);
+			child_call(cmd, cmd_list, env, prev_read_fd);
 		else
 			prev_read_fd = parent_call(cmd, prev_read_fd);
 		i++;
@@ -144,7 +144,7 @@ int	pipe_function(t_cmd *cmd, pid_t *pid, int exit_status, char **envp)
 	return (exit_status);
 }
 
-int	execute_command(t_cmd *cmd, char **envp)
+int	execute_command(t_cmd *cmd, t_env *env)
 {
 	pid_t pid[MAX_PROCESSES];
 	int exit_status;
@@ -152,10 +152,10 @@ int	execute_command(t_cmd *cmd, char **envp)
 	if (!cmd)
 		return (1);
 	exit_status = 0;
-	// ft_memset(pid, 0, sizeof(pid));
 	if (cmd->output_type != PIPEOUT && !cmd->next && is_built_in(cmd))
-		exit_status = parent_process_built_in(cmd, envp);
+		exit_status = parent_process_built_in(cmd, env);
 	else
-		exit_status = pipe_function(cmd, pid, exit_status, envp);
+		exit_status = pipe_function(cmd, pid, exit_status, env);
+	free_all_struct(cmd);
 	return (exit_status);
 }

@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:19:43 by messengu          #+#    #+#             */
-/*   Updated: 2025/08/09 18:24:00 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/12 20:33:58 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,10 +70,16 @@ typedef struct s_cmd
 	struct s_cmd		*next;
 }						t_cmd;
 
+typedef struct s_env
+{
+	char				**env;
+	int					is_cpy;
+}						t_env;
+
 // ---- FUNCTIONS ----
 
 t_cmd					*parse(char *line);
-int						execute_command(t_cmd *cmd, char **envp);
+int						execute_command(t_cmd *cmd, t_env *env);
 void					print_cmd(t_cmd *cmd);
 int						check_cmds(t_cmd *cmd);
 t_cmd					*tokens_to_cmds(t_token *tokens);

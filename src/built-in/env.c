@@ -6,19 +6,19 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 15:19:49 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/12 17:37:42 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/12 20:36:49 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/exec.h"
 #include "../../includes/minishell.h"
 
-int built_in_env(t_cmd *cmd, char **envp)
+int built_in_env(t_cmd *cmd, t_env *env)
 {
     int i;
 
     i = 0;
-    if (!envp || !envp[i])
+    if (!env->env || !env->env[i])
         return (1);
     if (invalid_option(cmd, "env") == 2)
     {
@@ -30,9 +30,9 @@ int built_in_env(t_cmd *cmd, char **envp)
         printf("env: Too many arguments\n");
         return (1);
     }
-    while (envp[i])
+    while (env->env[i])
     {
-        printf("%s\n", envp[i]);
+        printf("%s\n", env->env[i]);
         i++;
     }
     return (0);

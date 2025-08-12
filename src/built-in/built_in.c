@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:48:50 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/12 15:13:54 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/12 20:39:00 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ bool	is_built_in(t_cmd *cmd)
 	return (false);
 }
 
-int	parent_process_built_in(t_cmd *cmd, char **envp)
+int	parent_process_built_in(t_cmd *cmd, t_env *env)
 {
     int code_error;
 
@@ -47,16 +47,16 @@ int	parent_process_built_in(t_cmd *cmd, char **envp)
 		code_error = built_in_pwd(cmd);
 	// if (ft_strncmp(cmd->name, "export", 6) == 0)
 	// 	code_error = built_in_export(cmd, envp);
-	if (ft_strncmp(cmd->name, "unset", 5) == 0)
-		code_error =  built_in_unset(cmd, &envp);
+	// if (ft_strncmp(cmd->name, "unset", 5) == 0)
+	// 	code_error =  built_in_unset(cmd, env);
 	if (ft_strncmp(cmd->name, "env", 3) == 0)
-		code_error = built_in_env(cmd, envp);
+		code_error = built_in_env(cmd, env);
 	if (ft_strncmp(cmd->name, "exit", 4) == 0)
 	    code_error = built_in_exit(cmd, code_error);
     return (code_error);
 }
 
-int	child_process_built_in(t_cmd *cmd, char **envp)
+int	child_process_built_in(t_cmd *cmd, t_env *env)
 {
     int code_error;
 
@@ -69,9 +69,9 @@ int	child_process_built_in(t_cmd *cmd, char **envp)
 		code_error = built_in_pwd(cmd);
 	// if (ft_strncmp(cmd->name, "export", 6) == 0)
 	// 	code_error = built_in_export(cmd, envp);
-	if (ft_strncmp(cmd->name, "unset", 5) == 0)
-		code_error =  built_in_unset(cmd, &envp);
+	// if (ft_strncmp(cmd->name, "unset", 5) == 0)
+	// 	code_error =  built_in_unset(cmd, env);
 	if (ft_strncmp(cmd->name, "env", 3) == 0)
-		code_error = built_in_env(cmd, envp);
+		code_error = built_in_env(cmd, env);
     return (code_error);
 }

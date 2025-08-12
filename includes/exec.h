@@ -18,6 +18,14 @@
 # define WRITE 1
 
 typedef struct s_cmd	t_cmd;
+typedef struct s_env	t_env;
+
+// struct t_env
+
+t_env   *init_env(char **envp);
+char	**copy_env(char **envp);
+void    free_my_env(t_env *my_env);
+
 
 // built-in utils
 
@@ -29,15 +37,15 @@ int						env_len(char **envp);
 
 // built-in
 
-int						child_process_built_in(t_cmd *cmd, char **envp);
-int						parent_process_built_in(t_cmd *cmd, char **envp);
+int						child_process_built_in(t_cmd *cmd, t_env *env);
+int						parent_process_built_in(t_cmd *cmd, t_env *env);
 bool					is_built_in(t_cmd *cmd);
 int						built_in_echo(t_cmd *cmd);
 int						built_in_cd(t_cmd *cmd);
 int						built_in_pwd(t_cmd *cmd);
-int						built_in_export(t_cmd *cmd, char ***envp);
-int						built_in_unset(t_cmd *cmd, char ***envp);
-int						built_in_env(t_cmd *cmd, char **envp);
+int						built_in_export(t_cmd *cmd, t_env *env);
+int						built_in_unset(t_cmd *cmd, t_env *env);
+int						built_in_env(t_cmd *cmd, t_env *env);
 int						built_in_exit(t_cmd *cmd, int status);
 
 // errors
@@ -52,12 +60,12 @@ void					close_all_fd(int *fd);
 void					unused_heredoc_fd(t_cmd *current, t_cmd *cmd_list);
 int						wait_child(pid_t *pid, int size);
 int						pipe_function(t_cmd *cmd, pid_t *pid, int exit_status,
-							char **envp);
+							t_env *env);
 
 // get_path
 
 char					**get_path(char **envp);
-bool					exe_my_cmd(t_cmd *cmd, char **envp);
+bool					exe_my_cmd(t_cmd *cmd, t_env *env);
 
 // manage_files
 

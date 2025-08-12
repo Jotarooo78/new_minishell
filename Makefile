@@ -22,6 +22,7 @@ SRCS = \
 	src/exec/get_path.c \
 	src/exec/manage_files.c \
 	src/exec/utils.c \
+	src/exec/init_struct_env.c \
 	src/built-in/built_in.c \
 	src/built-in/cd.c \
 	src/built-in/echo.c \
@@ -31,6 +32,7 @@ SRCS = \
 	src/built-in/pwd.c \
 	src/built-in/unset.c \
 	src/built-in/built_in_utils.c \
+
 	
 OBJ_DIR = obj
 DEP_DIR = $(OBJ_DIR)
