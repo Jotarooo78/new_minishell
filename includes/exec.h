@@ -21,9 +21,10 @@ typedef struct s_cmd	t_cmd;
 
 // built-in utils
 
-long long	ft_atoll(char *str);
-int check_long(char *str);
-int is_valid_number(char *str);
+long long				ft_atoll(char *str);
+int						check_long(char *str);
+int						is_valid_number(char *str);
+int						invalid_option(t_cmd *cmd, char *str);
 
 // built-in
 
@@ -33,8 +34,8 @@ bool					is_built_in(t_cmd *cmd);
 int						built_in_echo(t_cmd *cmd);
 int						built_in_cd(t_cmd *cmd);
 int						built_in_pwd(t_cmd *cmd);
-int						built_in_export(t_cmd *cmd);
-int						built_in_unset(t_cmd *cmd);
+int						built_in_export(t_cmd *cmd, char ***envp);
+int						built_in_unset(t_cmd *cmd, char ***envp);
 int						built_in_env(t_cmd *cmd, char **envp);
 int						built_in_exit(t_cmd *cmd, int status);
 

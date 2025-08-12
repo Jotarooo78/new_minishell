@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 15:19:49 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/08 16:15:44 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/12 17:37:42 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int built_in_env(t_cmd *cmd, char **envp)
     i = 0;
     if (!envp || !envp[i])
         return (1);
-    if (cmd->args && (ft_strncmp(cmd->args[0], "-", 1) == 0))
+    if (invalid_option(cmd, "env") == 2)
     {
         printf("env: There is no option\n");
         return (1);

@@ -510,3 +510,53 @@ cmd 1:
 
 
 je ne comprends pas a debug lol
+
+
+new_env[i] est un pointeur vers une chaîne (type char *)
+*new_env[i] essaie de prendre le premier caractère de cette chaîne (type char)
+
+pourquoi pointe sur le premier char *new_env[i] pour moi je pensais qu'il pointait sur un tableau de string
+
+envp → pointeur vers → tableau de pointeurs → vers des chaînes
+ ***        **                *                  char
+
+ imaginons que je veux acceder a un char specifique dans une des chaines de char a la fin ?
+
+ Quand vous voulez accéder au tableau lui-même, vous devez déréférencer une fois : *envp. Quand vous voulez accéder à une chaîne dans ce tableau, vous utilisez (*envp)[i].
+
+ je capte pas la nuance
+
+
+
+ char ***envp;  // envp pointe vers notre structure
+
+1. envp        → Type: char*** , Valeur: adresse du pointeur vers le tableau
+2. *envp       → Type: char**  , Valeur: adresse du tableau lui-même
+3. **envp      → Type: char*   , Valeur: adresse de la première chaîne
+4. ***envp     → Type: char    , Valeur: premier caractère de la première chaîne
+5. (*envp)[1]  → Type: char*   , Valeur: adresse de la deuxième chaîne
+6. (*envp)[1][4] → Type: char  , Valeur: cinquième caractère de la deuxième chaîne
+
+
+minishell> env | grep armand
+
+PARSED COMMANDS
+cmd 1:
+[NAME]: env
+[ARGS]: NULL
+[INFILE]: NULL
+[OUTFILE]: NULL
+[HEREDOC]: NULL
+[OUTPUT_TYPE]: PIPEOUT
+[INPUT_TYPE]: STDIN
+
+cmd 2:
+[NAME]: grep
+[ARGS]: armand
+[INFILE]: NULL
+[OUTFILE]: NULL
+[HEREDOC]: NULL
+[OUTPUT_TYPE]: STDOUT
+[INPUT_TYPE]: PIPEIN
+
+infinite loop + 1million d'erreurs lol

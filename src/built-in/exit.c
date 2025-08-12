@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 15:19:54 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/11 20:33:02 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/12 17:38:09 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	is_valid_number(char *str)
 		while (str[i] == 32)
 			i++;
 		if (ft_isdigit(str[i]) == 0 && str[i] != '-' && str[i] != '+'
-			&& str[i] != 32) // no option
+			&& str[i] != 32)
 			return (2);
 		if (str[i] == '-' || str[i] == '+')
 		{
@@ -85,6 +85,11 @@ int	built_in_exit(t_cmd *cmd, int exit_status)
 		printf("exit\n");
 		return (free_all_struct(cmd), exit(exit_status), 0);
 	}
+	if (invalid_option(cmd, "exit") == 2)
+	{
+		return (printf("minishell: exit: %c: There is no option allowed\n",
+				cmd->args[0][0]), free_all_struct(cmd), exit(2), 2);
+	}
 	if (is_valid_number(cmd->args[0]) == 2)
 	{
 		printf("minishell: exit: %s: numeric argument required\n",
@@ -98,12 +103,8 @@ int	built_in_exit(t_cmd *cmd, int exit_status)
 		return (free_all_struct(cmd), exit(2), 2);
 	}
 	if (cmd->args[1])
-	{
-		printf("minishell: exit: too many arguments\n");
-		return (2);
-	}
-	printf("exit\n");
-	return (ft_atoll(cmd->args[0]) % 256);
+		return (printf("minishell: exit: too many arguments\n"), 2);
+	return (printf("exit\n"), ft_atoll(cmd->args[0]) % 256);
 }
 
 int	built_in_exit_bis(t_cmd *cmd, int exit_status)
