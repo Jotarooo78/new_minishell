@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 15:20:05 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/12 18:14:20 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/12 18:54:49 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ int env_len(char **envp)
 
 int    new_env(char ***envp, int target)
 {
-    printf("NEWENV111111111111111111111111111\n");
     int i;
     int len;
     char **new_env;
@@ -45,7 +44,7 @@ int    new_env(char ***envp, int target)
             return (1);
         i++;
     }
-    new_env[i] = NULL;
+    *new_env[i] = NULL;
     free_array(*envp);
     *envp = new_env;
     return (0);
@@ -57,16 +56,15 @@ int    find_var(t_cmd *cmd, char ***envp)
     int     j;
 
 	i = 0;
-    j = 0;
-    printf("heeeeereeee\n\n\n");
-	while ((*envp)[i])
+	while (cmd->args && cmd->args[i])
 	{
-        if (cmd->args && cmd->args[j])
+        j = 0;
+        while ((*envp)[j])
         {
-            if (ft_strncmp((*envp)[i], cmd->args[j], ft_strlen(cmd->args[j])) == 0)
+            if (ft_strncmp((*envp)[j], cmd->args[i], ft_strlen(cmd->args[i]) - 1) == 0)
             {
-                printf("STRNCMP111111111111111111111111111\n");
-                if (new_env(envp, i) == 1)
+                printf("FOUND IT\n");
+                if (new_env(envp, j) == 1)
                     return (1);
             }
             j++;
