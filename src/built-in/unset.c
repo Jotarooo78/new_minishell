@@ -6,13 +6,58 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 15:20:05 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/12 20:38:35 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/12 20:57:22 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/exec.h"
 #include "../../includes/minishell.h"
 
+int unset_var(t_env *env, char *pathname)
+{
+    int	i;
+	int	j;
+	int	len;
+
+	i = 0;
+	while (cmd->args && cmd->args[i])
+	{
+		len = ft_strlen(cmd->args[i]);
+		j = 0;
+		while (env->env[j])
+		{
+			if (ft_strncmp(env->env[j], cmd->args[i], len) == 0
+				&& env->env[j][len] == '=')
+			{
+				printf("FOUND IT\n");
+				// if (new_env(env, j) == 1)
+				return (1);
+			}
+			j++;
+		}
+		i++;
+	}
+	return (0);
+}
+
+int	built_in_unset(t_cmd *cmd, t_env *env)
+{
+	int	i;
+
+	i = 0;
+	if (!cmd->args || !cmd->args[0])
+		return (0);
+	if (cmd->args && invalid_option(cmd, "unset"))
+		return (printf("minishell: unset: '-': There is no option allowed\n"),
+			2);
+    while (cmd->args[i])
+    {
+        if (unset_var(env, cmd->args[i]) != 0)
+            return (1);
+        i++;
+    }
+	return (0);
+}
 
 // int	new_env(char ***envp, int target)
 // {
@@ -23,22 +68,22 @@
 
 // 	i = 0;
 //     j = 0;
-// 	len = env_len((*envp));
+// 	len = env_len(env->env));
 // 	new_env = malloc(sizeof(char *) * len);
 // 	if (!new_env)
 // 		return (1);
-// 	while ((*envp)[i])
+// 	while (env->env)[i])
 // 	{
 // 		if (i == target)
 // 			i++;
-// 		new_env[j] = ft_strdup((*envp)[i]);
+// 		new_env[j] = ft_strdup(env->env)[i]);
 // 		if (new_env[j] == NULL)
 // 			return (1);
 // 		i++;
 //         j++;
 // 	}
 // 	new_env[j] = NULL;
-// 	free_array(*envp);
+// 	free_arrayenv->env);
 // 	*envp = new_env;
 // 	return (0);
 // }
@@ -54,10 +99,10 @@
 // 	{
 // 		len = ft_strlen(cmd->args[i]);
 // 		j = 0;
-// 		while ((*envp)[j])
+// 		while (env->env)[j])
 // 		{
-// 			if (ft_strncmp((*envp)[j], cmd->args[i], len - 1) == 0
-// 				&& (*envp)[j][len] == '=')
+// 			if (ft_strncmp(env->env)[j], cmd->args[i], len - 1) == 0
+// 				&& env->env)[j][len] == '=')
 // 			{
 // 				printf("FOUND IT\n");
 // 				if (new_env(envp, j) == 1)
@@ -67,21 +112,5 @@
 // 		}
 // 		i++;
 // 	}
-// 	return (0);
-// }
-
-int	built_in_unset(t_cmd *cmd, t_env *env);
-
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	if (!cmd->args || !cmd->args[0])
-// 		return (0);
-// 	if (cmd->args && invalid_option(cmd, "unset"))
-// 		return (printf("minishell: unset: '-': There is no option allowed\n"),
-// 			2);
-// 	if (find_var(cmd, env->env))
-// 		return (1);
 // 	return (0);
 // }

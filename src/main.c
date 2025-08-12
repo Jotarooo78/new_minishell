@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:54:53 by messengu          #+#    #+#             */
-/*   Updated: 2025/08/12 20:17:48 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/12 20:41:06 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,5 +55,6 @@ int main(int argc, char **argv, char **envp)
 		execute_command(cmd, my_env);
 		free(line);
 	}
+	free_my_env(my_env);
     return (0);
 }
