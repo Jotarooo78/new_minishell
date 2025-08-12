@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 15:20:05 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/12 18:54:49 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/12 18:56:44 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int    new_env(char ***envp, int target)
             return (1);
         i++;
     }
-    *new_env[i] = NULL;
+    new_env[i] = NULL;
     free_array(*envp);
     *envp = new_env;
     return (0);
