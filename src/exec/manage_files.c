@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 14:52:39 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/11 20:46:11 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/12 12:12:40 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,8 @@ void	open_outfile(t_cmd *cmd)
 
 char	*change_into_vars(char *line)
 {
-	while ()
+	(void)line;
+	return (NULL);
 }
 
 void	child_process_heredoc(t_cmd *cmd, t_heredoc *heredoc, int *pipe_fd_h)
@@ -68,11 +69,11 @@ void	child_process_heredoc(t_cmd *cmd, t_heredoc *heredoc, int *pipe_fd_h)
 	{
 		line = readline("\033[36mheredoc> \033[0m");
 		if (line == NULL)
-		exit(1);
+			exit(1);
 		if (ft_strncmp(heredoc->delimiter, line, ft_strlen(line)) == 0)
 			break ;
-		if (heredoc->expand_vars)
-			line = change_into_vars(line);
+		// if (heredoc->expand_vars)
+		// 	line = change_into_vars(line);
 		write(pipe_fd_h[WRITE], line, ft_strlen(line));
 		write(pipe_fd_h[WRITE], "\n", 1);
 		free(line);
@@ -120,7 +121,7 @@ void	manage_heredocs(t_cmd *cmd)
 		if (heredoc->next && heredoc->heredoc_fd != -1)
 		{
 			close(heredoc->heredoc_fd);
-			heredoc->heredoc_fd = -1;	
+			heredoc->heredoc_fd = -1;
 		}
 		heredoc = heredoc->next;
 	}
