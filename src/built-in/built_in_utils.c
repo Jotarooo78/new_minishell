@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/09 18:07:34 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/12 18:38:58 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/12 19:48:26 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,4 +33,16 @@ int	invalid_option(t_cmd *cmd, char *str)
 		}
 	}
 	return (0);
+}
+
+int	env_len(char **envp)
+{
+	char	**tmp;
+	int		i;
+
+	i = 0;
+	tmp = envp;
+	while (tmp[i])
+		i++;
+	return (i);
 }

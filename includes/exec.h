@@ -25,6 +25,7 @@ long long				ft_atoll(char *str);
 int						check_long(char *str);
 int						is_valid_number(char *str);
 int						invalid_option(t_cmd *cmd, char *str);
+int						env_len(char **envp);
 
 // built-in
 

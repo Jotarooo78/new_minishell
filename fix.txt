@@ -560,3 +560,6 @@ cmd 2:
 [INPUT_TYPE]: PIPEIN
 
 infinite loop + 1million d'erreurs lol
+
+
+si on enleve le path, proteger contre ca
