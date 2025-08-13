@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 15:19:49 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/12 20:36:49 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/13 12:07:43 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int built_in_env(t_cmd *cmd, t_env *env)
         printf("env: Too many arguments\n");
         return (1);
     }
-    while (env->env[i])
+    while (env->env && env->env[i])
     {
         printf("%s\n", env->env[i]);
         i++;
