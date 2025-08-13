@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:48:50 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/13 11:17:14 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/13 15:22:18 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ int	parent_process_built_in(t_cmd *cmd, t_env *env)
 		code_error = built_in_cd(cmd);
 	if (ft_strncmp(cmd->name, "pwd", 3) == 0)
 		code_error = built_in_pwd(cmd);
-	// if (ft_strncmp(cmd->name, "export", 6) == 0)
-	// 	code_error = built_in_export(cmd, envp);
+	if (ft_strncmp(cmd->name, "export", 6) == 0)
+		code_error = built_in_export(cmd, env);
 	if (ft_strncmp(cmd->name, "unset", 5) == 0)
 		code_error =  built_in_unset(cmd, env);
 	if (ft_strncmp(cmd->name, "env", 3) == 0)
@@ -67,8 +67,8 @@ int	child_process_built_in(t_cmd *cmd, t_env *env)
 		code_error = built_in_cd(cmd);
 	if (ft_strncmp(cmd->name, "pwd", 3) == 0)
 		code_error = built_in_pwd(cmd);
-	// if (ft_strncmp(cmd->name, "export", 6) == 0)
-	// 	code_error = built_in_export(cmd, envp);
+	if (ft_strncmp(cmd->name, "export", 6) == 0)
+		code_error = built_in_export(cmd, env);
 	if (ft_strncmp(cmd->name, "unset", 5) == 0)
 		code_error =  built_in_unset(cmd, env);
 	if (ft_strncmp(cmd->name, "env", 3) == 0)

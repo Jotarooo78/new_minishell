@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/09 18:07:34 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/12 20:47:44 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/13 17:48:03 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,3 +46,31 @@ int	env_len(char **envp)
 		i++;
 	return (i);
 }
+
+// void	ft_swap(char **s1, char **s2)
+// {
+// 	char *tmp;
+	
+// 	tmp = *s1;
+// 	*s1 = *s2;
+// 	*s2 = tmp;
+// }
+
+// void	sort_env(char **env)
+// {
+// 	int i;
+// 	int j;
+
+// 	i = 0;
+// 	while (env[i])
+// 	{
+// 		j = i + 1;
+// 		while (env[j])
+// 		{
+// 			if (ft_strcmp(env[i], env[j]) > 0)
+// 				ft_swap(&env[i], &env[j]);
+// 			j++;
+// 		}
+// 		i++;
+// 	}
+// }
