@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 20:17:52 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/12 20:47:25 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/13 11:49:43 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,5 +64,6 @@ void    free_my_env(t_env *my_env)
     {
         free_array(my_env->env);
     }
-    free(my_env);
+	if (my_env)
+    	free(my_env);
 }

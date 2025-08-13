@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 14:47:40 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/09 18:08:25 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/13 11:43:19 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,11 @@
 void	print_array(char **array)
 {
 	int i;
-	int j;
 	
 	i = 0;
 	while (array[i])
 	{
-		j = 0;
-		while (array[i][j])
-		{
-			printf("\ncmd %d ->%c\n", i, array[i][j]);
-			j++;
-		}
+			printf("%d : %s\n", i, array[i]);
 		i++;
 	}
 }
