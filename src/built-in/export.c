@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 15:19:58 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/14 18:44:19 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/14 19:57:01 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,25 +49,6 @@ int	add_and_replace_env(t_env *env, char *var)
 	if (env->is_cpy)
 		free_array(env->env);
 	env->env = new_env;
-	return (0);
-}
-
-int	check_is_var_exist(t_env *env, char *var)
-{
-	int	i;
-	int	len_env_var;
-	int len_new_var;
-
-	i = 0;
-	while (env->env[i])
-	{
-		len_env_var = ft_strlen(env->env[i]);
-		len_new_var = ft_strlen(var);
-		if (ft_strncmp(env->env[i], var, len_new_var) == 0
-			&& len_env_var == len_new_var)
-				return (1);
-		i++;
-	}
 	return (0);
 }
 
@@ -132,24 +113,3 @@ int	built_in_export(t_cmd *cmd, t_env *env)
 	}
 	return (0);
 }
-
-// int	print_export_env(char **env)
-// {
-// 	char **export_env;
-// 	int env_size;
-// 	int i;
-
-// 	i = 0;
-// 	env_size = env_len(env);
-// 	export_env = copy_env(env);
-// 	if (!export_env)
-// 		return (1);
-// 	sort_env(env);
-// 	while (i <= env_size)
-// 	{
-// 		printf("declare -x ");
-// 		print_format_export_env(env);
-// 		i++;
-// 	}
-// 	return (0);
-// }

@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 14:47:40 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/13 11:43:19 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/14 19:26:06 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	count_args(t_cmd *cmd)
 	
 	i = 0;
 	tmp = cmd;
-	if (tmp->args == NULL || tmp == NULL)
+	if (!tmp->args || !tmp)
 		return (0);
 	while (tmp->args && tmp->args[i])
 		i++;

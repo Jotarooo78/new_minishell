@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/09 18:07:34 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/13 17:48:03 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/14 20:02:42 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,30 +47,38 @@ int	env_len(char **envp)
 	return (i);
 }
 
-// void	ft_swap(char **s1, char **s2)
-// {
-// 	char *tmp;
-	
-// 	tmp = *s1;
-// 	*s1 = *s2;
-// 	*s2 = tmp;
-// }
+char *find_var(char *target_var, char *env)
+{
+	int	i;
+	int len;
 
-// void	sort_env(char **env)
-// {
-// 	int i;
-// 	int j;
+	i = 0;
+	while (env[len] && env[len] != '=')
+		len++;
+	while (env[i])
+	{
+		if (ft_strncmp(env[i], target_var, len) == 0)
+			return (env);
+		i++;
+	}
+	return (NULL);
+}
 
-// 	i = 0;
-// 	while (env[i])
-// 	{
-// 		j = i + 1;
-// 		while (env[j])
-// 		{
-// 			if (ft_strcmp(env[i], env[j]) > 0)
-// 				ft_swap(&env[i], &env[j]);
-// 			j++;
-// 		}
-// 		i++;
-// 	}
-// }
+int	check_is_var_exist(t_env *env, char *var)
+{
+	int	i;
+	int	len_env_var;
+	int	len_new_var;
+
+	i = 0;
+	while (env->env[i])
+	{
+		len_env_var = ft_strlen(env->env[i]);
+		len_new_var = ft_strlen(var);
+		if (ft_strncmp(env->env[i], var, len_new_var) == 0
+			&& len_env_var == len_new_var)
+			return (1);
+		i++;
+	}
+	return (0);
+}

@@ -32,8 +32,8 @@ int						check_long(char *str);
 int						is_valid_number(char *str);
 int						invalid_option(t_cmd *cmd, char *str);
 int						env_len(char **envp);
-// void					sort_env(char **env);
-// void					ft_swap(char **s1, char **s2);
+int						check_is_var_exist(t_env *env, char *var);
+char					*find_var(char *target_var, char *env);
 
 // built-in
 
