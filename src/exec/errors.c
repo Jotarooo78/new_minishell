@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:22:59 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/15 18:06:46 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/15 18:38:10 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,7 @@ void	free_heredocs(t_heredoc *heredocs)
 	tmp_h = NULL;
 	while (heredocs)
 	{
-		if (heredocs->next)
-			tmp_h = heredocs->next;
+		tmp_h = heredocs->next;
 		if (heredocs->delimiter)
 			free(heredocs->delimiter);
 		if (heredocs->content)
@@ -68,8 +67,7 @@ void	free_infile(t_cmd *cmd)
 	tmp = NULL;
 	while (cmd->infile)
 	{
-		if (cmd->infile->next)
-			tmp = cmd->infile->next;
+		tmp = cmd->infile->next;
 		free(cmd->infile->name);
 		if (cmd->infile->fd != -1)
 			close(cmd->infile->fd);
@@ -87,8 +85,7 @@ void	free_outfile(t_cmd *cmd)
 	tmp = NULL;
 	while (cmd->outfile)
 	{
-		if (cmd->outfile->next)
-			tmp = cmd->outfile->next;
+		tmp = cmd->outfile->next;
 		free(cmd->outfile->name);
 		if (cmd->outfile->fd != -1)
 			close(cmd->outfile->fd);
@@ -101,14 +98,12 @@ void	free_all_struct(t_cmd *cmd)
 {
 	t_cmd	*tmp;
 
-	printf("DEBUG: free_all_struct called\n");
 	if (!cmd)
 		return ;
 	tmp = NULL;
 	while (cmd)
 	{
-		if (cmd->next)
-			tmp = cmd->next;
+		tmp = cmd->next;
 		if (cmd->infile)
 			free_infile(cmd);
 		if (cmd->outfile)
