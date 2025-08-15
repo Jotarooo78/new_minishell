@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 15:20:05 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/13 12:34:17 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/15 13:31:28 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int	built_in_unset(t_cmd *cmd, t_env *env)
 	i = 0;
 	if (!cmd->args || !cmd->args[0])
 		return (0);
-	if (cmd->args && invalid_option(cmd, "unset"))
+	if (cmd->args && invalid_option(cmd->args, "unset"))
 		return (printf("minishell: unset: '-': There is no option allowed\n"),
 			2);
 	while (cmd->args[i])

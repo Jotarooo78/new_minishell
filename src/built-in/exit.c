@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 15:19:54 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/12 17:38:09 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/15 13:31:13 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int	built_in_exit(t_cmd *cmd, int exit_status)
 		printf("exit\n");
 		return (free_all_struct(cmd), exit(exit_status), 0);
 	}
-	if (invalid_option(cmd, "exit") == 2)
+	if (cmd->args && invalid_option(cmd->args, "exit") == 2)
 	{
 		return (printf("minishell: exit: %c: There is no option allowed\n",
 				cmd->args[0][0]), free_all_struct(cmd), exit(2), 2);

@@ -6,51 +6,12 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 15:19:58 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/14 19:57:01 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/15 13:52:06 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/exec.h"
 #include "../../includes/minishell.h"
-
-int	add_and_replace_env_pt2(char **env, char **new_env, int i)
-{
-	new_env[i] = ft_strdup(env[i]);
-	if (!new_env[i])
-	{
-		free_array(new_env);
-		return (1);
-	}
-	return (0);
-}
-
-int	add_and_replace_env(t_env *env, char *var)
-{
-	int		env_size;
-	char	**new_env;
-	int		i;
-
-	i = -1;
-	env_size = env_len(env->env) + 2;
-	new_env = malloc(sizeof(char *) * env_size);
-	if (!new_env)
-		return (0);
-	while (env->env[++i] && i < env_size)
-		if (add_and_replace_env_pt2(env->env, new_env, i) == 1)
-			return (1);
-	new_env[i] = ft_strdup(var);
-	if (!new_env[i])
-	{
-		free_array(new_env);
-		return (1);
-	}
-	new_env[++i] = NULL;
-	print_array(new_env);
-	if (env->is_cpy)
-		free_array(env->env);
-	env->env = new_env;
-	return (0);
-}
 
 int	check_head_var(char *var)
 {
@@ -90,26 +51,119 @@ int	check_export_format(char *var)
 	return (0);
 }
 
-int	built_in_export(t_cmd *cmd, t_env *env)
+char	**copy_and_replace_my_env(char **env, char *var)
+{
+	int i;
+	char **tmp;
+
+	i = 0;
+	tmp = malloc(sizeof(char *) * env_len(env) + 1);
+	if (!tmp)
+		return (NULL);
+	while (env[i])
+	{
+		if (check_is_same_var(env[i], var))
+			tmp[i] = ft_strdup(var);
+		else
+			tmp[i] = ft_strdup(env[i]);
+		if (!tmp[i])
+		{
+			free_array(tmp);
+			return (NULL);
+		}
+		i++;
+	}
+	tmp[i] = NULL;
+	return (tmp);
+}
+
+char	**copy_and_add_my_env(char **env, char *var)
+{
+	int i;
+	char **tmp;
+
+	i = 0;
+	tmp = malloc(sizeof(char *) * env_len(env) + 2);
+	printf("size : %d\n", env_len(env));
+	if (!tmp)
+		return (NULL);
+	while (env[i])
+	{
+		tmp[i] = ft_strdup(env[i]);
+		if (!tmp[i])
+		{
+			free_array(tmp);
+			return (NULL);
+		}
+		i++;
+	}
+	printf("i : %d\n", i);
+	printf("tmp : %s\n", tmp[i]);
+	tmp[i] = ft_strdup(var);
+	printf("tmp : %s\n", tmp[i]);
+	printf("i : %d\n", i);
+	if (!tmp[i])
+	{
+			free_array(tmp);
+			return (NULL);
+	}
+	tmp[i + 1] = NULL;
+	printf("tmp : %s\n", tmp[i]);
+	printf("i : %d\n", i);
+	return (tmp);
+}
+
+int	get_my_env(char ***env, char *new_var)
+{
+	char **tmp;
+	int i;
+
+	i = 0;
+	while ((*env)[i])
+	{
+		if (check_is_same_var((*env)[i], new_var))
+		{
+			tmp = copy_and_replace_my_env(*env, new_var);
+			if (!tmp)
+				return (1);
+			free_array(*env);
+			*env = tmp;
+			return (0);
+		}
+		i++;
+	}
+	tmp = copy_and_add_my_env(*env, new_var);
+	if (!tmp)
+		return (1);
+	free_array(*env);
+	*env = tmp;
+	return (0);
+}
+
+int	built_in_export(t_cmd *cmd, t_env *env, int code_error)
 {
 	int	i;
 
-	i = 0;
+	i = -1;
 	if (!cmd->args || !cmd->args[0])
 		return (0);
-	if (cmd->args && invalid_option(cmd, "export"))
+	if (cmd->args && invalid_option(cmd->args, "export"))
 		return (printf("minishell: unset: '-': There is no option allowed\n"),
 			2);
-	while (cmd->args && cmd->args[i])
+	while (cmd->args && cmd->args[++i])
 	{
-		if (check_export_format(cmd->args[i]) != 0)
-			return (printf("minishell: export: %s: not a valid identifier\n",
-					cmd->args[i]), 1);
-		if (check_is_var_exist(env, cmd->args[i]) != 0)
+		while (cmd->args[i] && check_export_format(cmd->args[i]) == 1)
+		{
+			if (check_export_format(cmd->args[i]) != 0)
+			{
+				printf("minishell: export: %s: not a valid identifier\n",
+					cmd->args[i]);
+				code_error = 1;
+			}
+			i++;
+		}
+		if (cmd->args && cmd->args[i] && get_my_env(&(env->env), cmd->args[i]) == 1)
 			return (1);
-		if (add_and_replace_env(env, cmd->args[i]) != 0)
-			return (1);
-		i++;
 	}
-	return (0);
+	return (code_error);
 }

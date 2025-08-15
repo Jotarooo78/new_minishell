@@ -30,10 +30,10 @@ void					free_my_env(t_env *my_env);
 long long				ft_atoll(char *str);
 int						check_long(char *str);
 int						is_valid_number(char *str);
-int						invalid_option(t_cmd *cmd, char *str);
+int						invalid_option(char **args, char *str);
 int						env_len(char **envp);
-int						check_is_var_exist(t_env *env, char *var);
-char					*find_var(char *target_var, char *env);
+int						check_is_same_var(char *s1, char *s2);
+char					*find_var(char *target_var, char **env);
 
 // built-in
 
@@ -41,9 +41,9 @@ int						child_process_built_in(t_cmd *cmd, t_env *env);
 int						parent_process_built_in(t_cmd *cmd, t_env *env);
 bool					is_built_in(t_cmd *cmd);
 int						built_in_echo(t_cmd *cmd);
-int						built_in_cd(t_cmd *cmd);
+int						built_in_cd(t_cmd *cmd, t_env *env);
 int						built_in_pwd(t_cmd *cmd);
-int						built_in_export(t_cmd *cmd, t_env *env);
+int						built_in_export(t_cmd *cmd, t_env *env, int code_error);
 int						built_in_unset(t_cmd *cmd, t_env *env);
 int						built_in_env(t_cmd *cmd, t_env *env);
 int						built_in_exit(t_cmd *cmd, int status);

@@ -6,19 +6,19 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/09 18:07:34 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/14 20:02:42 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/15 13:45:48 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/exec.h"
 #include "../../includes/minishell.h"
 
-int	invalid_option(t_cmd *cmd, char *str)
+int	invalid_option(char **args, char *str)
 {
-	if (cmd->args)
+	if (args)
 	{
-		if ((cmd->args[0][0] == '-' && cmd->args[0][1])
-			|| (cmd->args[0][0] == '-' && !cmd->args[0][1]))
+		if ((args[0][0] == '-' && args[0][1])
+			|| (args[0][0] == '-' && !args[0][1]))
 		{
 			if (ft_strncmp(str, "env", 3) == 0)
 				return (2);
@@ -42,43 +42,60 @@ int	env_len(char **envp)
 
 	i = 0;
 	tmp = envp;
+	if (!tmp || !tmp[i])
+		return (0);
 	while (tmp[i])
 		i++;
 	return (i);
 }
 
-char *find_var(char *target_var, char *env)
+char	*find_var(char *target_var, char **env)
 {
 	int	i;
-	int len;
+	int	len;
 
 	i = 0;
-	while (env[len] && env[len] != '=')
+	len = 0;
+	while (*env[len] && *env[len] != '=')
 		len++;
 	while (env[i])
 	{
 		if (ft_strncmp(env[i], target_var, len) == 0)
-			return (env);
+			return (*env);
 		i++;
 	}
 	return (NULL);
 }
 
-int	check_is_var_exist(t_env *env, char *var)
+int 	return_char_pos(char *str, char c)
 {
-	int	i;
-	int	len_env_var;
-	int	len_new_var;
+	int i;
 
 	i = 0;
-	while (env->env[i])
+	if (!str || !str[i])
+		return (0);
+	while (str[i])
 	{
-		len_env_var = ft_strlen(env->env[i]);
-		len_new_var = ft_strlen(var);
-		if (ft_strncmp(env->env[i], var, len_new_var) == 0
-			&& len_env_var == len_new_var)
-			return (1);
+		if (str[i] == c)
+			return (i);
 		i++;
 	}
+	return (0);
+}
+
+int	check_is_same_var(char *s1, char *s2)
+{
+	int	i;
+	int	len_s1;
+	int	len_s2;
+
+	i = 0;
+	len_s1 = return_char_pos(s1, '=');
+	len_s2 = return_char_pos(s2, '=');
+	if (len_s1 == 0 || len_s2 == 0)
+		return (0);
+	if (ft_strncmp(s1, s2, len_s1) == 0
+		&& len_s2 == len_s1)
+		return (1);
 	return (0);
 }
