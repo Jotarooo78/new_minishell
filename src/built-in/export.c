@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 15:19:58 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/15 13:54:35 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/15 14:02:05 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,7 @@ char	**copy_and_add_my_env(char **env, char *var)
 	char **tmp;
 
 	i = 0;
-	tmp = malloc(sizeof(char *) * env_len(env) + 2);
-	printf("size : %d\n", env_len(env));
+	tmp = malloc(sizeof(char *) * (env_len(env) + 2));
 	if (!tmp)
 		return (NULL);
 	while (env[i])
@@ -97,19 +96,13 @@ char	**copy_and_add_my_env(char **env, char *var)
 		}
 		i++;
 	}
-	printf("i : %d\n", i);
-	printf("tmp : %s\n", tmp[i]);
 	tmp[i] = ft_strdup(var);
-	printf("tmp : %s\n", tmp[i]);
-	printf("i : %d\n", i);
 	if (!tmp[i])
 	{
 			free_array(tmp);
 			return (NULL);
 	}
 	tmp[++i] = NULL;
-	printf("tmp : %s\n", tmp[i]);
-	printf("i : %d\n", i);
 	return (tmp);
 }
 

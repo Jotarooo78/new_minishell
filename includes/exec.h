@@ -34,6 +34,7 @@ int						invalid_option(char **args, char *str);
 int						env_len(char **envp);
 int						check_is_same_var(char *s1, char *s2);
 char					*find_var(char *target_var, char **env);
+char					**copy_and_replace_my_env(char **env, char *var);
 
 // built-in
 
