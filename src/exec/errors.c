@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:22:59 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/12 20:47:48 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/15 17:54:36 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ void	free_all_struct(t_cmd *cmd)
 {
 	t_cmd	*tmp;
 
+	printf("DEBUG: free_all_struct called\n");
 	if (!cmd)
 		return ;
 	tmp = NULL;
@@ -114,12 +115,13 @@ void	free_all_struct(t_cmd *cmd)
 			free_outfile(cmd);
 		if (cmd->heredocs)
 			free_heredocs(cmd->heredocs);
-		if (cmd->name)
-			free(cmd->name);
+		// if (cmd->name)
+		// 	free(cmd->name);
 		if (cmd->args)
 			free_array(cmd->args);
 		if (cmd->pipefd[READ] != -1 || cmd->pipefd[WRITE] != -1)
 			close_all_fd(cmd->pipefd);
+		free(cmd);
 		cmd = tmp;
 	}
 }

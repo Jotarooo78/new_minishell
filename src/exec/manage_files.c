@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 14:52:39 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/12 20:47:35 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/15 17:57:09 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,10 @@ void	open_outfile(t_cmd *cmd)
 	while (file && file->name)
 	{
 		if (file->append)
-			file->fd = open(cmd->outfile->name, O_WRONLY | O_CREAT | O_APPEND,
+			file->fd = open(file->name, O_WRONLY | O_CREAT | O_APPEND,
 					0644);
 		else
-			file->fd = open(cmd->outfile->name, O_WRONLY | O_CREAT | O_TRUNC,
+			file->fd = open(file->name, O_WRONLY | O_CREAT | O_TRUNC,
 					0644);
 		if (file->fd == -1)
 		{

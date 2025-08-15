@@ -6,29 +6,12 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:39:21 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/13 12:51:05 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/15 17:35:02 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/exec.h"
 #include "../../includes/minishell.h"
-
-// void	debug_fds(const char *label)
-// {
-// 	fprintf(stderr, "=== %s ===\n", label);
-// 	for (int i = 0; i < 10; i++)
-// 	{
-// 		if (fcntl(i, F_GETFD) != -1)
-// 		{
-// 			fprintf(stderr, "FD %d: OPEN\n", i);
-// 		}
-// 		else
-// 		{
-// 			fprintf(stderr, "FD %d: CLOSED\n", i);
-// 		}
-// 	}
-// 	fprintf(stderr, "==========\n");
-// }
 
 void	child_call(t_cmd *cmd, t_cmd *cmd_list, t_env *env, int prev_read_fd)
 {
