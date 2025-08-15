@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 15:19:43 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/15 18:38:59 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/15 18:52:25 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,28 +63,23 @@ int update_my_path_and_env(t_env *env, char *target_path)
 	if (get_my_export_env(&env->env, new_path))
 		return (1);
 	free(new_path);
-	printf("end update_my_path\n");
+	// printf("end update_my_path\n");
 	return (0);
 }
 
 int get_specific_path(t_env *env, char *target_path)
 {
 	char	*path;
-
-	printf("here\n");
+	
 	path = find_var(target_path, env->env);
 	if (path == NULL)
-	{
-		printf("lol\n");	
 		return (1);
-	}
-	printf("path from get_specific_path : %s\n", path);
+	// printf("path from get_specific_path : %s\n", path);
 	get_my_export_env(&env->env, target_path);
 	if (update_my_path_and_env(env, target_path) == 1)
 		return (1);
 	if (chdir(path) == -1)
 		return (1);
-	printf("end get_spec\n");
 	return (0);
 }
 
@@ -104,7 +99,7 @@ int	built_in_cd(t_cmd *cmd, t_env *env)
 		{
 			if (get_specific_path(env, "HOME=") == 0)
 				return (0);
-			return (perror("cd: HOME:"), 1);
+			return (perror("cd: HOME"), 1);
 		}
 		if ((ft_strncmp(cmd->args[0], "-", 1) == 0 && len == 1))
 		{

@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/09 18:07:34 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/15 18:38:56 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/15 18:53:08 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ char	*find_var(char *target_var, char **env)
 
 	i = 0;
 	len = 0;
-	while (*env[len] && *env[len] != '=')
+	while ((*env)[len] && (*env)[len] != '=')
 		len++;
 	while (env[i])
 	{
@@ -64,6 +64,7 @@ char	*find_var(char *target_var, char **env)
 			return (*env);
 		i++;
 	}
+	printf("find end");
 	return (NULL);
 }
 
