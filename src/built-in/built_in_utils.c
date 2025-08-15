@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/09 18:07:34 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/15 18:53:08 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/15 19:28:51 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,18 +53,22 @@ char	*find_var(char *target_var, char **env)
 {
 	int	i;
 	int	len;
+	char *ret_path;
 
 	i = 0;
-	len = 0;
-	while ((*env)[len] && (*env)[len] != '=')
-		len++;
+	ret_path = NULL;
+	len = ft_strlen(target_var);
 	while (env[i])
 	{
 		if (ft_strncmp(env[i], target_var, len) == 0)
-			return (*env);
+		{
+			ret_path = ft_strdup(env[i]);
+			if (!ret_path)
+				return (NULL);
+			return (ret_path);
+		}
 		i++;
 	}
-	printf("find end");
 	return (NULL);
 }
 
