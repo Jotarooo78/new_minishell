@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 15:19:43 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/15 19:30:01 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/15 19:33:01 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,11 +76,12 @@ int get_specific_path(t_env *env, char *target_path)
 	if (path == NULL)
 		return (1);
 	printf("path from get_specific_path : %s\n", path);
-	get_my_export_env(&env->env, target_path);
-	// if (update_my_path_and_env(env, target_path) == 1) // probleme ici
+	get_my_export_env(&env->env, path);
+	// if (update_my_path_and_env(env, target_path) == 1) // probleme ici + surement inutile
 	// 	return (1);
 	if (chdir(path) == -1)
 		return (1);
+	free(path);
 	return (0);
 }
 
