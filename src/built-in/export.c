@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 15:19:58 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/15 13:52:06 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/15 13:54:35 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ char	**copy_and_add_my_env(char **env, char *var)
 			free_array(tmp);
 			return (NULL);
 	}
-	tmp[i + 1] = NULL;
+	tmp[++i] = NULL;
 	printf("tmp : %s\n", tmp[i]);
 	printf("i : %d\n", i);
 	return (tmp);
