@@ -563,3 +563,9 @@ infinite loop + 1million d'erreurs lol
 
 
 si on enleve le path, proteger contre ca
+
+
+minishell> env | grep armand
+
+free(): double free detected in tcache 2
+[1]    73185 IOT instruction (core dumped)  ./minishell

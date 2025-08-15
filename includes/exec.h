@@ -36,6 +36,14 @@ int						check_is_same_var(char *s1, char *s2);
 char					*find_var(char *target_var, char **env);
 char					**copy_and_replace_my_env(char **env, char *var);
 
+// built-in : export unset utils
+
+int						get_my_export_env(char ***env, char *new_var);
+char					**copy_and_add_my_env(char **env, char *var);
+char					**copy_and_replace_my_env(char **env, char *var);
+
+int						get_my_unset_env(char ***env, char *new_var);
+
 // built-in
 
 int						child_process_built_in(t_cmd *cmd, t_env *env);

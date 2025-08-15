@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 15:20:05 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/15 14:17:52 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/15 14:26:35 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,16 +26,16 @@ char	**unset_replace_my_env(char **env, char *var)
 		return (NULL);
 	while (env[i])
 	{
-		if (check_is_same_var(env[i], var))
-			i++;
-		else
-			tmp[i] = ft_strdup(env[i]);
-		if (!tmp[i])
+		if (!check_is_same_var(env[i], var))
 		{
-			free_array(tmp);
-			return (NULL);
+			tmp[j] = ft_strdup(env[i]);
+			if (!tmp[j])
+			{
+				free_array(tmp);
+				return (NULL);
+			}
+			j++;
 		}
-		j++;
 		i++;
 	}
 	tmp[j] = NULL;
@@ -63,7 +63,6 @@ int	get_my_unset_env(char ***env, char *new_var)
 	}
 	return (0);
 }
-
 
 int	built_in_unset(t_cmd *cmd, t_env *env)
 {

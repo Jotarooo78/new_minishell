@@ -32,6 +32,7 @@ SRCS = \
 	src/built-in/pwd.c \
 	src/built-in/unset.c \
 	src/built-in/built_in_utils.c \
+	src/built-in/export_utils.c \
 
 	
 OBJ_DIR = obj
