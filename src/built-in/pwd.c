@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 15:20:01 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/08 16:35:14 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/17 12:31:07 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int built_in_pwd(t_cmd *cmd)
     pwd = getcwd(buffer, 1024);
     if (!pwd)
     {
-        perror("pwd: getcwd");
+        perror("");
         return (1);
     }
     if (pwd)

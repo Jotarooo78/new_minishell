@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 15:19:43 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/17 12:24:18 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/17 12:30:56 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	handle_cd_errors(t_cmd *cmd)
 	if (!cmd->args)
 		return (printf("minishell: cd: absolute or relative path only allowed\n"),
 			1);
-	if (cmd->args[1] && cmd->args[2])
+	if (cmd->args[0] && cmd->args[1])
 		return (printf("minishell: cd: too many arguments\n"), 1);
 	if (cmd->args[0][0] == '-' && cmd->args[0][1])
 		return (printf("minishell: cd: '-': There is no option allowed\n"), 2);
@@ -83,12 +83,12 @@ int	built_in_cd(t_cmd *cmd, t_env *env)
 	dir = opendir(cmd->args[0]);
 	if (dir == NULL)
 	{
-		printf("minishell: cd: opendir:");
+		printf("");
 		return (perror("cd: dir"), 1);
 	}
-	if (chdir(cmd->args[1]) == -1)
+	if (chdir(cmd->args[0]) == -1)
 	{
-		perror("minishell: cd: chdir");
+		perror("");
 		return (closedir(dir), 1);
 	}
 	if (change_update_pwd_and_env(&env->env) != 0)
@@ -96,7 +96,7 @@ int	built_in_cd(t_cmd *cmd, t_env *env)
 	if (closedir(dir) == -1)
 	{
 		printf("minishell: cd: closedir: error closing directory stream");
-		return (perror("minishell: cd: closedir"), 1);
+		return (perror(""), 1);
 	}
 	return (0);
 }
