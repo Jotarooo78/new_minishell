@@ -65,12 +65,24 @@ void					error(t_cmd *cmd, char *str, int code);
 void					free_all_struct(t_cmd *cmd);
 void					close_all_fd(int *fd);
 
-// exec
+// parent process
 
-void					unused_heredoc_fd(t_cmd *current, t_cmd *cmd_list);
-int						wait_child(pid_t *pid, int size);
+int						execute_command(t_cmd *cmd, t_env *env);
 int						pipe_function(t_cmd *cmd, pid_t *pid, int exit_status,
 							t_env *env);
+int						parent_call(t_cmd *cmd, int prev_read_fd);
+void					pipe_check_or_create(t_cmd *cmd, int prev_read_fd);
+void					pidarray_check(t_cmd *cmd, pid_t *pid, int prev_read_fd,
+							int i);
+
+// child process
+
+void					child_call(t_cmd *cmd, t_cmd *cmd_list, t_env *env,
+							int prev_read_fd);
+void					files_and_management(t_cmd *cmd, t_cmd *cmd_list,
+							int prev_read_fd);
+void					unused_heredoc_fd(t_cmd *current, t_cmd *cmd_list);
+int						wait_child(pid_t *pid, int size);
 
 // get_path
 

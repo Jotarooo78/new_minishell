@@ -17,8 +17,8 @@ SRCS = \
 	src/parsing/quote_remover.c \
 	src/parsing/cmd_checker.c \
 	src/parsing/tokens_to_cmds.c \
-	src/exec/errors.c \
-	src/exec/exec.c \
+	src/exec/parent_process.c \
+	src/exec/child_process.c \
 	src/exec/get_path.c \
 	src/exec/manage_files.c \
 	src/exec/utils.c \

@@ -145,6 +145,10 @@ comparaison foireuse car \0 pas mis a la fin de la commande echo alors que ft_st
 
 gerer echo $? en tant qu'expand pour les erreurs
 
+
+
+
+
 //////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                                          //
 //                                                                                          //
@@ -269,9 +273,9 @@ FD 9: CLOSED
 ==========
 id^M^M^M^M^M^M
 
-erreur avec frequence aleatoire : provenance des close_all_fd(old_fd) dans child_process_heredoc
+comportement trop bizarre
 
-inishell> << e
+minishell> << e
 
 PARSED COMMANDS
 cmd 1:
@@ -283,206 +287,75 @@ cmd 1:
 [OUTPUT_TYPE]: STDOUT
 [INPUT_TYPE]: HEREDOC
 
+heredoc> armand
 heredoc> e
-==85715== 
-==85715== FILE DESCRIPTORS: 3 open (3 std) at exit.
-==85715== 
-==85715== HEAP SUMMARY:
-==85715==     in use at exit: 208,268 bytes in 228 blocks
-==85715==   total heap usage: 446 allocs, 218 frees, 228,755 bytes allocated
-==85715== 
-==85715== LEAK SUMMARY:
-==85715==    definitely lost: 27 bytes in 2 blocks
-==85715==    indirectly lost: 0 bytes in 0 blocks
-==85715==      possibly lost: 0 bytes in 0 blocks
-==85715==    still reachable: 208,241 bytes in 226 blocks
-==85715==         suppressed: 0 bytes in 0 blocks
-==85715== Rerun with --leak-check=full to see details of leaked memory
-==85715== 
-==85715== For lists of detected and suppressed errors, rerun with: -s
-==85715== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
-=== BEFORE redirections ===
-FD 0: OPEN
-FD 1: OPEN
-FD 2: OPEN
-FD 3: OPEN
-FD 4: OPEN
-FD 5: CLOSED
-FD 6: CLOSED
-FD 7: CLOSED
-FD 8: CLOSED
-FD 9: CLOSED
-==========
-
-ce child process a un syscall close sur un fd -1
-
-=== BEFORE execve ===
-FD 0: OPEN
-FD 1: OPEN
-FD 2: OPEN
-FD 3: OPEN
-FD 4: OPEN
-FD 5: CLOSED
-FD 6: CLOSED
-FD 7: CLOSED
-FD 8: CLOSED
-FD 9: CLOSED
-==========
-DEBUG: Restoring fd 3->0 and fd 4->1
-DEBUG: About to close old_fd 3 and 4
-DEBUG: old_fd closed
-minishell> 
-
-bug lorsque je deplace le curseur avec ctrl apres avoir tape cette commande :
-==20312== 
-==20312== For lists of detected and suppressed errors, rerun with: -s
-==20312== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
-minishell> echo armand ourang outan a presque tout vendudu | grep a > file2
-
-continuite du probleme : 
- > file2l> echo armand ourang outan a presque tout vendudu | grep a > file2
+==152362== 
+==152362== FILE DESCRIPTORS: 3 open (3 std) at exit.
+==152362== 
+==152362== HEAP SUMMARY:
+==152362==     in use at exit: 214,442 bytes in 536 blocks
+==152362==   total heap usage: 937 allocs, 401 frees, 255,503 bytes allocated
+==152362== 
+==152362== LEAK SUMMARY:
+==152362==    definitely lost: 744 bytes in 155 blocks
+==152362==    indirectly lost: 844 bytes in 67 blocks
+==152362==      possibly lost: 0 bytes in 0 blocks
+==152362==    still reachable: 212,854 bytes in 314 blocks
+==152362==         suppressed: 0 bytes in 0 blocks
+==152362== Rerun with --leak-check=full to see details of leaked memory
+==152362== 
+==152362== For lists of detected and suppressed errors, rerun with: -s
+==152362== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+minishell> armand
 
 PARSED COMMANDS
 cmd 1:
-[NAME]: echo
-[ARGS]: armand ourang outan a presque tout vendudu
+[NAME]: armand
+[ARGS]: NULL
 [INFILE]: NULL
 [OUTFILE]: NULL
 [HEREDOC]: NULL
-[OUTPUT_TYPE]: PIPEOUT
+[OUTPUT_TYPE]: STDOUT
 [INPUT_TYPE]: STDIN
 
-cmd 2:
-[NAME]: lsgrep
-[ARGS]: a
-[INFILE]: NULL
-[OUTFILE]:  > file2
-[HEREDOC]: NULL
-[OUTPUT_TYPE]: STDOUT
-[INPUT_TYPE]: PIPEIN
-
-command not found: Bad file descriptor
-==20362== Memcheck, a memory error detector
-==20362== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
-==20362== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
-==20362== Command: /usr/bin/echo armand ourang outan a presque tout vendudu
-==20362== 
-==20363== 
-==20363== FILE DESCRIPTORS: 3 open (3 std) at exit.
-==20363== 
-==20363== HEAP SUMMARY:
-==20363==     in use at exit: 213,524 bytes in 781 blocks
-==20363==   total heap usage: 1,314 allocs, 533 frees, 240,331 bytes allocated
-==20363== 
-==20363== LEAK SUMMARY:
-==20363==    definitely lost: 1,374 bytes in 332 blocks
-==20363==    indirectly lost: 2,296 bytes in 166 blocks
-==20363==      possibly lost: 0 bytes in 0 blocks
-==20363==    still reachable: 209,854 bytes in 283 blocks
-==20363==         suppressed: 0 bytes in 0 blocks
-==20363== Rerun with --leak-check=full to see details of leaked memory
-==20363== 
-==20363== For lists of detected and suppressed errors, rerun with: -s
-==20363== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
-==20362== 
-==20362== Process terminating with default action of signal 13 (SIGPIPE)
-==20362==    at 0x4988887: write (write.c:26)
-==20362==    by 0x48FEEEC: _IO_file_write@@GLIBC_2.2.5 (fileops.c:1180)
-==20362==    by 0x49009E0: new_do_write (fileops.c:448)
-==20362==    by 0x49009E0: _IO_new_do_write (fileops.c:425)
-==20362==    by 0x49009E0: _IO_do_write@@GLIBC_2.2.5 (fileops.c:422)
-==20362==    by 0x48FE4D7: _IO_file_sync@@GLIBC_2.2.5 (fileops.c:798)
-==20362==    by 0x48F31A9: fflush (iofflush.c:40)
-==20362==    by 0x10B398: ??? (in /usr/bin/echo)
-==20362==    by 0x10CA34: ??? (in /usr/bin/echo)
-==20362==    by 0x48B9494: __run_exit_handlers (exit.c:113)
-==20362==    by 0x48B960F: exit (exit.c:143)
-==20362==    by 0x489DD96: (below main) (libc_start_call_main.h:74)
-==20362== 
-==20362== FILE DESCRIPTORS: 3 open (3 std) at exit.
-==20362== 
-==20362== HEAP SUMMARY:
-==20362==     in use at exit: 8,156 bytes in 30 blocks
-==20362==   total heap usage: 31 allocs, 1 frees, 8,161 bytes allocated
-==20362== 
-==20362== LEAK SUMMARY:
-==20362==    definitely lost: 0 bytes in 0 blocks
-==20362==    indirectly lost: 0 bytes in 0 blocks
-==20362==      possibly lost: 0 bytes in 0 blocks
-==20362==    still reachable: 8,156 bytes in 30 blocks
-==20362==         suppressed: 0 bytes in 0 blocks
-==20362== Rerun with --leak-check=full to see details of leaked memory
-==20362== 
-==20362== For lists of detected and suppressed errors, rerun with: -s
-==20362== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+command not found: No such file or directory
+==152364== 
+==152364== FILE DESCRIPTORS: 3 open (3 std) at exit.
+==152364== 
+==152364== HEAP SUMMARY:
+==152364==     in use at exit: 214,513 bytes in 543 blocks
+==152364==   total heap usage: 978 allocs, 435 frees, 257,258 bytes allocated
+==152364== 
+==152364== LEAK SUMMARY:
+==152364==    definitely lost: 766 bytes in 159 blocks
+==152364==    indirectly lost: 844 bytes in 67 blocks
+==152364==      possibly lost: 0 bytes in 0 blocks
+==152364==    still reachable: 212,903 bytes in 317 blocks
+==152364==         suppressed: 0 bytes in 0 blocks
+==152364== Rerun with --leak-check=full to see details of leaked memory
+==152364== 
+==152364== For lists of detected and suppressed errors, rerun with: -s
+==152364== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+minishell> ==152363== 
+==152363== FILE DESCRIPTORS: 3 open (3 std) at exit.
+==152363== 
+==152363== HEAP SUMMARY:
+==152363==     in use at exit: 210,442 bytes in 484 blocks
+==152363==   total heap usage: 945 allocs, 461 frees, 256,669 bytes allocated
+==152363== 
+==152363== LEAK SUMMARY:
+==152363==    definitely lost: 766 bytes in 159 blocks
+==152363==    indirectly lost: 844 bytes in 67 blocks
+==152363==      possibly lost: 0 bytes in 0 blocks
+==152363==    still reachable: 208,832 bytes in 258 blocks
+==152363==         suppressed: 0 bytes in 0 blocks
+==152363== Rerun with --leak-check=full to see details of leaked memory
+==152363== 
+==152363== For lists of detected and suppressed errors, rerun with: -s
+==152363== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+minishell> 
 
 une comparaison avec un invalid read of size 8 + segfault facilement :
-
-minishell> echo armand
-
-PARSED COMMANDS
-cmd 1:
-[NAME]: echo
-[ARGS]: armand
-[INFILE]: NULL
-[OUTFILE]: NULL
-[HEREDOC]: NULL
-[OUTPUT_TYPE]: STDOUT
-[INPUT_TYPE]: STDIN
-
-==63307== Invalid read of size 8
-==63307==    at 0x40326A: built_in_echo (built_in.c:28)
-==63307==    by 0x403513: parent_process_built_in (built_in.c:71)
-==63307==    by 0x403D34: execute_command (exec.c:136)
-==63307==    by 0x4012D0: main (main.c:30)
-==63307==  Address 0x4b64120 is 0 bytes after a block of size 16 alloc'd
-==63307==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==63307==    by 0x402C45: tokens_to_cmds (tokens_to_cmds.c:75)
-==63307==    by 0x401350: parse (parser.c:37)
-==63307==    by 0x4012BF: main (main.c:29)
-==63307== 
-parent
-
-probleme d'echo 
-
-minishell> echo armand
-
-PARSED COMMANDS
-cmd 1:
-[NAME]: echo
-[ARGS]: armand
-[INFILE]: NULL
-[OUTFILE]: NULL
-[HEREDOC]: NULL
-[OUTPUT_TYPE]: STDOUT
-[INPUT_TYPE]: STDIN
-
-
-minishell> echo armand armand
-
-PARSED COMMANDS
-cmd 1:
-[NAME]: echo
-[ARGS]: armand armand
-[INFILE]: NULL
-[OUTFILE]: NULL
-[HEREDOC]: NULL
-[OUTPUT_TYPE]: STDOUT
-[INPUT_TYPE]: STDIN
-
-armand
-minishell> 
-
-armosnie@f6r13s3:~/42/3_circle/new_minishell$ echo $?
-0
-armosnie@f6r13s3:~/42/3_circle/new_minishell$ bash --posix
-bash-5.1$ exit sggsf
-exit
-bash: exit: sggsf: numeric argument required
-armosnie@f6r13s3:~/42/3_circle/new_minishell$ echo $?
-2
-armosnie@f6r13s3:~/42/3_circle/new_minishell$ 
-
 
 gerer echo $? c'est un expand
 
@@ -536,36 +409,3 @@ envp → pointeur vers → tableau de pointeurs → vers des chaînes
 4. ***envp     → Type: char    , Valeur: premier caractère de la première chaîne
 5. (*envp)[1]  → Type: char*   , Valeur: adresse de la deuxième chaîne
 6. (*envp)[1][4] → Type: char  , Valeur: cinquième caractère de la deuxième chaîne
-
-
-minishell> env | grep armand
-
-PARSED COMMANDS
-cmd 1:
-[NAME]: env
-[ARGS]: NULL
-[INFILE]: NULL
-[OUTFILE]: NULL
-[HEREDOC]: NULL
-[OUTPUT_TYPE]: PIPEOUT
-[INPUT_TYPE]: STDIN
-
-cmd 2:
-[NAME]: grep
-[ARGS]: armand
-[INFILE]: NULL
-[OUTFILE]: NULL
-[HEREDOC]: NULL
-[OUTPUT_TYPE]: STDOUT
-[INPUT_TYPE]: PIPEIN
-
-infinite loop + 1million d'erreurs lol
-
-
-si on enleve le path, proteger contre ca
-
-
-minishell> env | grep armand
-
-free(): double free detected in tcache 2
-[1]    73185 IOT instruction (core dumped)  ./minishell
