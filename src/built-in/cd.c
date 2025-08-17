@@ -6,113 +6,100 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 15:19:43 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/15 19:33:01 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/17 12:24:18 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/exec.h"
 #include "../../includes/minishell.h"
 
-// dup puis unset et export
-
-// int	save_pwd_update_oldpwd(t_env *env)
-// {
-	
-// }
-
-void copy_new_path(char *new_path, char **split_path)
+char	*return_oldpwd(char **env)
 {
-	int i;
-	int j;
-	int k;
+	char	*pwd;
+	char	*new_oldpwd;
 
-	i = 0;
-	j = 0;
-	while (split_path[i + 1])
-	{
-		k = 0;
-		while (split_path[i][k] && new_path[j])
-		{
-			new_path[j] = split_path[i][k];
-			k++;
-			j++;
-		}
-		i++;
-	}
-	new_path[j] = '\0';
-	free_array(split_path);
-	printf("end copy new path\n");
+	pwd = ft_getenv("PWD", env);
+	if (!pwd)
+		return (NULL);
+	new_oldpwd = ft_strjoin("OLDPWD=", pwd);
+	if (!new_oldpwd)
+		return (NULL);
+	return (new_oldpwd);
 }
 
-int update_my_path_and_env(t_env *env, char *target_path)
+char	*return_pwd(void)
 {
-	char *path;
-	char **split_path;
-	char	*new_path;
-	int len;
+	char	*pwd;
+	char	buff[1024];
 
-	// if (save_pwd_update_oldpwd(env) == 1)
-	// 	return (1);
-	len = ft_strlen(path);
-	new_path = malloc(sizeof(char) * len + 1);
-	split_path = ft_split(path, '/');
-	if (!split_path)
+	pwd = getcwd(buff, 1024);
+	if (!pwd)
+		return (NULL);
+	return (pwd);
+}
+
+int	change_update_pwd_and_env(char ***env)
+{
+	char	*new_oldpwd;
+	char	*new_pwd;
+
+	new_oldpwd = return_oldpwd(*env);
+	if (!new_oldpwd)
 		return (1);
-	copy_new_path(new_path, split_path);
-	if (get_my_unset_env(&env->env, target_path))
+	if (get_my_export_env(env, new_oldpwd) != 0)
 		return (1);
-	if (get_my_export_env(&env->env, new_path))
+	free(new_oldpwd);
+	new_pwd = return_pwd();
+	if (!new_pwd)
 		return (1);
-	free(new_path);
-	printf("end update_my_path\n");
+	if (get_my_export_env(env, new_pwd) != 0)
+		return (1);
+	free(new_pwd);
 	return (0);
 }
 
-int get_specific_path(t_env *env, char *target_path)
+int	handle_cd_errors(t_cmd *cmd)
 {
-	char	*path;
-	
-	path = find_var(target_path, env->env);
-	if (path == NULL)
-		return (1);
-	printf("path from get_specific_path : %s\n", path);
-	get_my_export_env(&env->env, path);
-	// if (update_my_path_and_env(env, target_path) == 1) // probleme ici + surement inutile
-	// 	return (1);
-	if (chdir(path) == -1)
-		return (1);
-	free(path);
+	if (!cmd->args)
+		return (printf("minishell: cd: absolute or relative path only allowed\n"),
+			1);
+	if (cmd->args[1] && cmd->args[2])
+		return (printf("minishell: cd: too many arguments\n"), 1);
+	if (cmd->args[0][0] == '-' && cmd->args[0][1])
+		return (printf("minishell: cd: '-': There is no option allowed\n"), 2);
+	if ((cmd->args && cmd->args[0][0] == '~' && !cmd->args[0][1]) || (cmd->args
+			&& cmd->args[0][0] == '-' && !cmd->args[0][1]))
+		return (printf("minishell: cd: absolute or relative path only allowed\n"),
+			1);
 	return (0);
 }
-
 
 int	built_in_cd(t_cmd *cmd, t_env *env)
 {
-	int	len;
+	DIR	*dir;
 
-	len = count_args(cmd);
-	if (ft_strncmp(cmd->name, "cd..", 4) == 0)
-		return (printf("minishell: cd..: command not found\n"), 0);
-	if (cmd->args)
+	if (handle_cd_errors(cmd) == 1)
+		return (1);
+	dir = opendir(cmd->args[0]);
+	if (dir == NULL)
 	{
-		if (cmd->args[0][0] == '-' && cmd->args[0][1])
-			return (printf("minishell: cd: '-': There is no option allowed\n"), 2);
-		if (len == 0 || ((ft_strncmp(cmd->args[0], "~", 1) == 0 && len == 1)))
-		{
-			if (get_specific_path(env, "HOME=") == 0)
-				return (0);
-			return (perror("cd: HOME"), 1);
-		}
-		if ((ft_strncmp(cmd->args[0], "-", 1) == 0 && len == 1))
-		{
-			if (get_specific_path(env, "OLDPWD=") == 0)
-				return (0);
-			return (perror("cd: OLDPWD:"), 1);
-		}
+		printf("minishell: cd: opendir:");
+		return (perror("cd: dir"), 1);
+	}
+	if (chdir(cmd->args[1]) == -1)
+	{
+		perror("minishell: cd: chdir");
+		return (closedir(dir), 1);
+	}
+	if (change_update_pwd_and_env(&env->env) != 0)
+		return (1);
+	if (closedir(dir) == -1)
+	{
+		printf("minishell: cd: closedir: error closing directory stream");
+		return (perror("minishell: cd: closedir"), 1);
 	}
 	return (0);
 }
-
 
 // si il y a pas eu de changement de directory avec cd, oldpwd doit etre NULL
 

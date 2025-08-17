@@ -6,13 +6,12 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 14:27:20 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/15 18:38:42 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/17 11:55:56 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/exec.h"
 #include "../../includes/minishell.h"
-
 
 char	**copy_and_replace_my_env(char **env, char *var)
 {
@@ -94,4 +93,35 @@ int	get_my_export_env(char ***env, char *new_var)
 	free_array(*env);
 	*env = tmp;
 	return (0);
+}
+
+char *ft_getenv(char *var, char **env)
+{
+	char *expand;
+	int i;
+	int len;
+	int j;
+
+	expand = NULL;
+	i = 0;
+	j = 0;
+	len = ft_strlen(var);
+	if (!var || !env || !env[i] || len == 0)
+		return (NULL);
+	while (env[i])
+	{
+		if (check_is_same_var(var, env[i]))
+		{
+			while (env[i][j] && env[i][j] != '=')
+				j++;
+			if (env[i][j] == '=')
+			{
+				j++;
+				expand = ft_strdup((env[i] + j));
+				return (expand);
+			}
+		}
+		i++;
+	}
+	return (NULL);
 }

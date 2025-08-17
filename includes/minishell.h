@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:19:43 by messengu          #+#    #+#             */
-/*   Updated: 2025/08/12 20:33:58 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/17 10:48:12 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,13 @@
 
 # include "../includes/exec.h"
 # include "../includes/parsing.h"
+# include <dirent.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <sys/types.h>
 # define MAX_PROCESSES 256 // pour mon tableau de pid
 
 // ---- STRUCTS ----

@@ -38,6 +38,7 @@ char					**copy_and_replace_my_env(char **env, char *var);
 
 // built-in : export unset utils
 
+char					*ft_getenv(char *var, char **env);
 int						get_my_export_env(char ***env, char *new_var);
 char					**copy_and_add_my_env(char **env, char *var);
 char					**copy_and_replace_my_env(char **env, char *var);
