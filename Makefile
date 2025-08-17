@@ -22,6 +22,7 @@ SRCS = \
 	src/exec/get_path.c \
 	src/exec/manage_files.c \
 	src/exec/utils.c \
+	src/exec/errors.c \
 	src/exec/init_struct_env.c \
 	src/built-in/built_in.c \
 	src/built-in/cd.c \

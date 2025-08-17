@@ -84,16 +84,17 @@ void					files_and_management(t_cmd *cmd, t_cmd *cmd_list,
 void					unused_heredoc_fd(t_cmd *current, t_cmd *cmd_list);
 int						wait_child(pid_t *pid, int size);
 
+// manage_files
+
+void					open_infile(t_cmd *cmd);
+void					open_outfile(t_cmd *cmd);
+void					manage_heredocs(t_cmd *cmd, t_env *env);
+
 // get_path
 
 char					**get_path(char **envp);
 bool					exe_my_cmd(t_cmd *cmd, t_env *env);
 
-// manage_files
-
-void					open_infile(t_cmd *cmd);
-void					open_outfile(t_cmd *cmd);
-void					manage_heredocs(t_cmd *cmd);
 
 // utils
 

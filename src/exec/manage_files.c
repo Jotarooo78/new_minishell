@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 14:52:39 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/15 17:57:09 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/17 14:15:41 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,12 @@ char	*change_into_vars(char *line)
 	return (NULL);
 }
 
-void	child_process_heredoc(t_cmd *cmd, t_heredoc *heredoc, int *pipe_fd_h)
+int	child_process_heredoc(t_cmd *cmd, t_env *env, t_heredoc *heredoc, int *pipe_fd_h)
 {
 	char	*line;
+	char 	*expand;
 
+	expand = NULL;
 	close(pipe_fd_h[READ]);
 	while (1)
 	{
@@ -72,16 +74,19 @@ void	child_process_heredoc(t_cmd *cmd, t_heredoc *heredoc, int *pipe_fd_h)
 			exit(1);
 		if (ft_strncmp(heredoc->delimiter, line, ft_strlen(line)) == 0)
 			break ;
-		// if (heredoc->expand_vars)
-		// 	line = change_into_vars(line);
-		write(pipe_fd_h[WRITE], line, ft_strlen(line));
+		if (heredoc->expand_vars)
+		{
+			expand = find_var(line, env->env);
+			write(pipe_fd_h[WRITE], expand, ft_strlen(expand));
+			free(expand);
+		}
+		else
+			write(pipe_fd_h[WRITE], line, ft_strlen(line)); // a finir
 		write(pipe_fd_h[WRITE], "\n", 1);
 		free(line);
 	}
 	close(pipe_fd_h[WRITE]);
-	free(line);
-	free_all_struct(cmd);
-	exit(0);
+	return (free(line), free_all_struct(cmd), exit(0), 0);
 }
 
 int	parent_process_heredoc(pid_t pid, int *pipe_fd_h)
@@ -91,7 +96,7 @@ int	parent_process_heredoc(pid_t pid, int *pipe_fd_h)
 	return (pipe_fd_h[READ]);
 }
 
-void	manage_heredocs(t_cmd *cmd)
+void	manage_heredocs(t_cmd *cmd, t_env *env)
 {
 	t_heredoc	*heredoc;
 	pid_t		pid;
@@ -115,7 +120,7 @@ void	manage_heredocs(t_cmd *cmd)
 			error(cmd, "fork failed", 1);
 		}
 		if (pid == 0)
-			child_process_heredoc(cmd, heredoc, pipe_fd_h);
+			child_process_heredoc(cmd, env, heredoc, pipe_fd_h);
 		else
 			heredoc->heredoc_fd = parent_process_heredoc(pid, pipe_fd_h);
 		if (heredoc->next && heredoc->heredoc_fd != -1)

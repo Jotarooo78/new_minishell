@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/09 18:07:34 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/15 19:39:39 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/17 14:01:58 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ char	*find_var(char *target_var, char **env)
 			ret_path = ft_strdup(&env[i][equal_len + 1]);
 			if (!ret_path)
 				return (NULL);
-			return (ret_path);
+			return (ret_path + equal_len + 1);
 		}
 		i++;
 	}
