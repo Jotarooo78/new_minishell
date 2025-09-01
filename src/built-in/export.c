@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 15:19:58 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/17 11:55:46 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/01 12:16:00 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,27 +55,25 @@ int	built_in_export(t_cmd *cmd, t_env *env, int code_error)
 {
 	int	i;
 
-	i = -1;
+	i = 0;
 	if (!cmd->args || !cmd->args[0])
 		return (0);
 	if (cmd->args && invalid_option(cmd->args, "export"))
 		return (printf("minishell: export: '-': There is no option allowed\n"),
 			2);
-	while (cmd->args && cmd->args[++i])
+	while (cmd->args && cmd->args[i])
 	{
-		while (cmd->args[i] && check_export_format(cmd->args[i]) == 1)
+		if (check_export_format(cmd->args[i]) != 0)
 		{
-			if (check_export_format(cmd->args[i]) != 0)
-			{
-				printf("minishell: export: %s: not a valid identifier\n",
-					cmd->args[i]);
-				code_error = 1;
-			}
-			i++;
+			printf("minishell: export: %s: not a valid identifier\n",
+				cmd->args[i]);
+			printf("code error : %d\n", code_error);
+			code_error = 1;
 		}
 		if (cmd->args && cmd->args[i] && get_my_export_env(&(env->env),
 				cmd->args[i]) == 1)
 			return (1);
+		i++;
 	}
 	return (code_error);
 }

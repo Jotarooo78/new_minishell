@@ -384,6 +384,7 @@ cmd 1:
 
 je ne comprends pas a debug lol
 
+///////////////////////////////////////////////////////////////////////////////
 
 new_env[i] est un pointeur vers une chaîne (type char *)
 *new_env[i] essaie de prendre le premier caractère de cette chaîne (type char)
@@ -400,7 +401,6 @@ envp → pointeur vers → tableau de pointeurs → vers des chaînes
  je capte pas la nuance
 
 
-
  char ***envp;  // envp pointe vers notre structure
 
 1. envp        → Type: char*** , Valeur: adresse du pointeur vers le tableau
@@ -408,4 +408,15 @@ envp → pointeur vers → tableau de pointeurs → vers des chaînes
 3. **envp      → Type: char*   , Valeur: adresse de la première chaîne
 4. ***envp     → Type: char    , Valeur: premier caractère de la première chaîne
 5. (*envp)[1]  → Type: char*   , Valeur: adresse de la deuxième chaîne
-6. (*envp)[1][4] → Type: char  , Valeur: cinquième caractère de la deuxième chaîne
+06. (*envp)[1][4] → Type: char  , Valeur: cinquième caractère de la deuxième chaîne
+
+/////////////////////////////////////////////////////////////////////////////////
+
+Export c d (segfault)
+Export a b
+nm -U (normi)
+Env -i | grep PATH (créer un mini env)
+Readline leak (fichier gitignore)
+Export a=$a -> 1 (bien export et proteger line too long)
+Echo a > /dev/full (pwd et echo avec un strlen qui retourne la taille pour voir si ça a fonctionné, problème de redirection)
+Vim ; pkill vim (proteger avec la restauration avec tcsetattr et tcgetattr)
