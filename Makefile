@@ -17,14 +17,21 @@ SRCS = \
 	src/parsing/quote_remover.c \
 	src/parsing/cmd_checker.c \
 	src/parsing/tokens_to_cmds.c \
+	src/parsing/redirect_utils.c \
+	src/parsing/tokens_to_cmds_utils.c \
 	src/exec/parent_process.c \
 	src/exec/child_process.c \
+	src/exec/term_state.c \
 	src/exec/get_path.c \
 	src/exec/manage_files.c \
 	src/exec/utils.c \
 	src/exec/errors.c \
+	src/exec/errors2.c \
 	src/exec/init_struct_env.c \
+	src/exec/manage_signal.c \
+	src/exec/signal.c \
 	src/built-in/built_in.c \
+	src/built-in/built_in_utils2.c \
 	src/built-in/cd.c \
 	src/built-in/echo.c \
 	src/built-in/env.c \
