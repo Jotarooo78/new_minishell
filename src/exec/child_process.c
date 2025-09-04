@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 13:46:05 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/17 13:46:17 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/04 14:03:55 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ void	child_call(t_cmd *cmd, t_cmd *cmd_list, t_env *env, int prev_read_fd)
 	}
 	if (is_built_in(cmd))
 	{
-		printf("here\n");
 		exit_status = child_process_built_in(cmd, env);
 		exit(exit_status);
 	}
@@ -63,5 +62,10 @@ int	wait_child(pid_t *pid, int size)
 		waitpid(pid[i], &status, 0);
 		i++;
 	}
-	return (status);
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+	else if (WIFSIGNALED(status))
+		return (128 + WTERMSIG(status));
+	else
+		return (1);
 }

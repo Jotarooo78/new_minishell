@@ -64,7 +64,7 @@ int							built_in_export(t_cmd *cmd, t_env *env,
 								int code_error);
 int							built_in_unset(t_cmd *cmd, t_env *env);
 int							built_in_env(t_cmd *cmd, t_env *env);
-int							built_in_exit(t_cmd *cmd, int status);
+int							built_in_exit(t_cmd *cmd, int status, t_env *env);
 
 // errors
 
@@ -107,17 +107,17 @@ void						manage_heredocs(t_cmd *cmd);
 
 bool						exe_my_cmd(t_cmd *cmd, t_env *env);
 
-// // init interface utilisateur
+// init interface utilisateur
 
-// void							handle_sigint(int sig);
-// void							exec_handle_sigint(int sig);
-// void							handle_sigquit(int sig);
+void							handle_sigint(int sig);
+void							exec_handle_sigint(int sig);
+void							handle_sigquit(int sig);
 
-// // sig handlers
+// sig handlers
 
-// void							handle_child_signal(void);
-// void							handle_interactive_signal(void);
-// void							handle_exec_signal(void);
+void							handle_child_signal(void);
+void							handle_interactive_signal(void);
+void							handle_exec_signal(void);
 
 // utils
 
