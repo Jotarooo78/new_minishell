@@ -1,6 +1,7 @@
 NAME = minishell
 
 CC = cc
+TEST_FILE = file1 file2 file3
 CFLAGS = -Wall -Wextra -Werror -MMD -g3 
 LDFLAGS = -L/opt/homebrew/opt/readline/lib
 LDLIBS = -lreadline
@@ -8,6 +9,7 @@ RM = rm -f
 
 SRCS = \
 	src/main.c \
+	src/signal_utils.c \
 	src/parsing/parser.c \
 	src/parsing/tokenizer.c \
 	src/parsing/token.c \
@@ -25,6 +27,7 @@ SRCS = \
 	src/exec/get_path.c \
 	src/exec/manage_files.c \
 	src/exec/utils.c \
+	src/exec/utils_heredoc.c \
 	src/exec/errors.c \
 	src/exec/errors2.c \
 	src/exec/init_struct_env.c \
@@ -64,9 +67,11 @@ $(OBJ_DIR)/%.o: src/%.c
 
 -include $(DEPS)
 
+fresh: 
+	@rm $(TEST_FILE) > /dev/null
+
 clean:
 	$(RM) -r $(OBJ_DIR)
-	make clean -C libft
 
 fclean: clean
 	$(RM) $(NAME)
