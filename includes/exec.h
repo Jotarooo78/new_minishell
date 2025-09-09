@@ -80,6 +80,12 @@ void						close_all_fd(int *fd);
 void						command_not_found_error(t_cmd *cmd,
 								char *command_name);
 
+// check
+
+void						pipe_check_or_create(t_cmd *cmd, int prev_read_fd);
+void						pidarray_check(t_cmd *cmd, pid_t *pid,
+								int prev_read_fd, int i);
+
 // parent process
 
 int							execute_command(t_cmd *cmd, t_env *env);
@@ -102,6 +108,10 @@ int							wait_child(pid_t *pid, int size);
 
 void						open_infile(t_cmd *cmd);
 void						open_outfile(t_cmd *cmd);
+void						manage_no_cmd_with_an_outfile(t_cmd *cmd);
+
+// heredoc
+
 void						manage_heredocs(t_cmd *cmd);
 
 // get_path
@@ -136,5 +146,16 @@ void						unused_heredoc_fd(t_cmd *current, t_cmd *cmd_list);
 
 int							save_termios(struct termios *out_saved);
 void						restore_termios(const struct termios *saved);
+
+// signal
+
+void						handle_sigint(int signal);
+void						handle_sigint_in_exec(int signal);
+void						handle_sigquit(int signal);
+void						interactive_signal_handler(void);
+void						exec_signal_handler(void);
+void						child_signal_handler(void);
+void						heredoc_signal_handler(void);
+void						handle_signal_heredoc(int signal);
 
 #endif

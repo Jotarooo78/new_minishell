@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 14:27:20 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/09 11:23:30 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/09 11:38:36 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,6 @@ int	get_my_export_env(char ***env, char *new_var)
 			tmp = copy_and_replace_my_env(*env, new_var);
 			if (!tmp)
 				return (1);
-			// printf("1\n");
-			// print_array(tmp);
 			free_array(*env);
 			*env = tmp;
 			return (0);
@@ -92,8 +90,6 @@ int	get_my_export_env(char ***env, char *new_var)
 	tmp = copy_and_add_my_env(*env, new_var);
 	if (!tmp)
 		return (1);
-	printf("2\n");
-	print_array(tmp);
 	free_array(*env);
 	*env = tmp;
 	return (0);
@@ -108,7 +104,6 @@ char	*ft_getenv(char *var, char **env)
 	i = 0;
 	j = 0;
 	len = ft_strlen(var);
-	printf("var len : %d\n", len);
 	if (!var || !env || !env[i] || len == 0)
 		return (NULL);
 	while (env[i])
