@@ -7,6 +7,7 @@
 # include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <sys/ioctl.h>
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <termios.h>
@@ -77,14 +78,8 @@ void						pipe_and_pid_error(t_cmd *cmd, t_heredoc *heredoc,
 								int *pipe_fd_h, int err);
 void						free_array(char **split);
 void						close_all_fd(int *fd);
-void						command_not_found_error(t_cmd *cmd,
+void						command_not_found_error(t_cmd *cmd, t_env *env,
 								char *command_name);
-
-// check
-
-void						pipe_check_or_create(t_cmd *cmd, int prev_read_fd);
-void						pidarray_check(t_cmd *cmd, pid_t *pid,
-								int prev_read_fd, int i);
 
 // parent process
 
@@ -92,31 +87,47 @@ int							execute_command(t_cmd *cmd, t_env *env);
 int							pipe_function(t_cmd *cmd, pid_t *pid,
 								int exit_status, t_env *env);
 int							parent_call(t_cmd *cmd, int prev_read_fd);
-void						pipe_check_or_create(t_cmd *cmd, int prev_read_fd);
 void						pidarray_check(t_cmd *cmd, pid_t *pid,
 								int prev_read_fd, int i);
+
+// parent process
+
+void						pipe_check_or_create(t_cmd *cmd, pid_t *pid, int i,
+								int prev_read_fd);
+void						pidarray_check(t_cmd *cmd, pid_t *pid,
+								int prev_read_fd, int i);
+int							single_heredoc(t_cmd *cmd, t_cmd *first_cmd,
+								t_env *env, int prev_read_fd);
 
 // child process
 
 void						child_call(t_cmd *cmd, t_cmd *cmd_list, t_env *env,
 								int prev_read_fd);
 void						files_and_management(t_cmd *cmd, t_cmd *cmd_list,
-								int prev_read_fd);
+								int prev_read_fd, t_env *env);
 int							wait_child(pid_t *pid, int size);
 
 // manage_files
 
-void						open_infile(t_cmd *cmd);
-void						open_outfile(t_cmd *cmd);
-void						manage_no_cmd_with_an_outfile(t_cmd *cmd);
+int							open_infile(t_cmd *cmd, t_cmd *cmd_list,
+								t_env *env);
+void						open_outfile(t_cmd *cmd, t_cmd *cmd_list,
+								t_env *env);
 
 // heredoc
 
-void						manage_heredocs(t_cmd *cmd);
+int							manage_heredocs(t_cmd *current, t_cmd *cmd,
+								int prev_read_fd, t_env *env);
+
+// utils heredoc
+
+t_heredoc					*get_last_heredoc(t_cmd *cmd);
+void						unused_heredoc_fd(t_cmd *current, t_cmd *cmd_list);
+int							check_heredoc_total(t_cmd *cmd);
 
 // get_path
 
-bool						exe_my_cmd(t_cmd *cmd, t_env *env);
+bool						exe_my_cmd(t_cmd *cmd, t_cmd *cmd_list, t_env *env);
 
 // init interface utilisateur
 
@@ -137,11 +148,6 @@ int							count_args(t_cmd *cmd);
 int							count_all_cmd_args(t_cmd *cmd);
 void						print_array(char **array);
 
-// utils heredoc
-
-t_heredoc					*get_last_heredoc(t_cmd *cmd);
-void						unused_heredoc_fd(t_cmd *current, t_cmd *cmd_list);
-
 // term state
 
 int							save_termios(struct termios *out_saved);
@@ -149,13 +155,9 @@ void						restore_termios(const struct termios *saved);
 
 // signal
 
-void						handle_sigint(int signal);
-void						handle_sigint_in_exec(int signal);
-void						handle_sigquit(int signal);
-void						interactive_signal_handler(void);
-void						exec_signal_handler(void);
-void						child_signal_handler(void);
-void						heredoc_signal_handler(void);
-void						handle_signal_heredoc(int signal);
+void						handle_signals(int interactive);
+void						handle_child_signals(void);
+void						handle_heredoc_signals(void);
+void						parent_ignore_signals(void);
 
 #endif

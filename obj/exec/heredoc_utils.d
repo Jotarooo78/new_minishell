@@ -1,4 +1,4 @@
-obj/exec/manage_signal.o: src/exec/manage_signal.c \
+obj/exec/heredoc_utils.o: src/exec/heredoc_utils.c \
   src/exec/../../includes/exec.h \
   src/exec/../../includes/../libft/libft.h \
   src/exec/../../includes/minishell.h \

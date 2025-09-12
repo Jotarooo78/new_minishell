@@ -6,48 +6,51 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/08 17:50:43 by matis             #+#    #+#             */
-/*   Updated: 2025/09/09 15:41:22 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/12 12:43:20 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
 #include "../../includes/exec.h"
+#include "../../includes/minishell.h"
 
-void	interactive_signal_handler(void)
+volatile sig_atomic_t	g_signal;
+
+void	handle_sigint(int signal)
 {
-	t_sa	sa;
-
-	sa.sa_handler = handle_sigint;
-	sigemptyset(&sa.sa_mask);
-	sa.sa_flags = SA_RESTART;
-	sigaction(SIGINT, &sa, NULL);
-	signal(SIGQUIT, SIG_IGN);
+	(void)signal;
+	printf("\n");
+	rl_replace_line("", 0);
+	rl_on_new_line();
+	if (g_signal == 0)
+		rl_redisplay();
 }
 
-void	exec_signal_handler(void)
+void	handle_sigint_in_exec(int signal)
 {
-	t_sa	sa;
-
-	sa.sa_handler = handle_sigint_in_exec;
-	sigemptyset(&sa.sa_mask);
-	sa.sa_flags = SA_RESTART;
-	sigaction(SIGINT, &sa, NULL);
-	signal(SIGQUIT, handle_sigquit);
+	(void)signal;
+	printf("\n");
+	rl_replace_line("", 0);
+	rl_on_new_line();
 }
 
-void	child_signal_handler(void)
+void	handle_sigquit(int signal)
 {
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
+	(void)signal;
+	ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
+	rl_replace_line("", 0);
+	rl_on_new_line();
 }
 
-void	heredoc_signal_handler(void)
+void	handle_signals(int interactive)
 {
-	t_sa	sa;
-
-	sa.sa_handler = handle_signal_heredoc;
-	sigemptyset(&sa.sa_mask);
-	sa.sa_flags = 0;
-	sigaction(SIGINT, &sa, NULL);
-	signal(SIGQUIT, SIG_IGN);
+	if (interactive)
+	{
+		signal(SIGINT, &handle_sigint);
+		signal(SIGQUIT, SIG_IGN);
+	}
+	else
+	{
+		signal(SIGINT, &handle_sigint_in_exec);
+		signal(SIGQUIT, &handle_sigquit);
+	}
 }

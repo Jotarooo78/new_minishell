@@ -6,42 +6,38 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 14:52:39 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/09 16:38:23 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/12 12:41:35 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/exec.h"
 #include "../../includes/minishell.h"
 
-void	manage_no_cmd_with_an_outfile(t_cmd *cmd)
-{
-	int prev_old_fd;
-
-	prev_old_fd = dup(FD_STDOUT);
-	open_outfile(cmd);
-	dup2(prev_old_fd, FD_STDOUT);
-	close(prev_old_fd);
-}
-
-void	open_infile(t_cmd *cmd)
+int	open_infile(t_cmd *cmd, t_cmd *cmd_list, t_env *env)
 {
 	t_file	*file;
 
 	file = cmd->infile;
+	if (!file || !file->name)
+		return (perror(file->name), 1);
 	while (file && file->name)
 	{
 		file->fd = open(file->name, O_RDONLY);
 		if (file->fd == -1)
 		{
-			error(cmd, file->name, 1);
+			perror(file->name);
+			free_all_struct(cmd_list);
+			free_my_env(env);
+			exit(1);
 		}
 		dup2(file->fd, FD_STDIN);
 		close(file->fd);
 		file = file->next;
 	}
+	return (0);
 }
 
-void	open_outfile(t_cmd *cmd)
+void	open_outfile(t_cmd *cmd, t_cmd *cmd_list, t_env *env)
 {
 	t_file	*file;
 
@@ -49,14 +45,15 @@ void	open_outfile(t_cmd *cmd)
 	while (file && file->name)
 	{
 		if (file->append)
-			file->fd = open(file->name, O_WRONLY | O_CREAT | O_APPEND,
-					0644);
+			file->fd = open(file->name, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		else
-			file->fd = open(file->name, O_WRONLY | O_CREAT | O_TRUNC,
-					0644);
+			file->fd = open(file->name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (file->fd == -1)
 		{
-			error(cmd, file->name, 1);
+			perror(file->name);
+			free_all_struct(cmd_list);
+			free_my_env(env);
+			exit(1);
 		}
 		dup2(file->fd, FD_STDOUT);
 		close(file->fd);

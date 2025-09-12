@@ -6,42 +6,35 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 15:06:05 by matis             #+#    #+#             */
-/*   Updated: 2025/09/09 15:49:08 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/12 12:43:13 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/exec.h"
 #include "../../includes/minishell.h"
 
-volatile sig_atomic_t	g_signal;
-
-void	handle_sigint(int signal)
+void	handle_child_signals(void)
 {
-	g_signal = signal;
-	write(1, "\n", 1);
-	// rl_replace_line("", 0);
-	rl_on_new_line();
-	rl_redisplay();
-}
-
-void	handle_sigint_in_exec(int signal)
-{
-	g_signal = signal;
-	// rl_replace_line("", 0);
-	rl_on_new_line();
-}
-
-void	handle_sigquit(int signal)
-{
-	(void)signal;
-	ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
-	// rl_replace_line("", 0);
-	rl_on_new_line();
+	signal(SIGINT, SIG_DFL);
 }
 
 void	handle_signal_heredoc(int signal)
 {
 	g_signal = signal;
-	// rl_replace_line("", 0);
+	write(STDOUT_FILENO, "\n", 1);
+	rl_replace_line("", 0);
 	rl_on_new_line();
+	ioctl(STDOUT_FILENO, TIOCSTI, "\n");
+}
+
+void	handle_heredoc_signals(void)
+{
+	signal(SIGINT, &handle_signal_heredoc);
+	signal(SIGQUIT, SIG_IGN);
+}
+
+void	parent_ignore_signals(void)
+{
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 }

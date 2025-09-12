@@ -1,4 +1,5 @@
-obj/exec/check.o: src/exec/check.c src/exec/../../includes/exec.h \
+obj/exec/parent_process2.o: src/exec/parent_process2.c \
+  src/exec/../../includes/exec.h \
   src/exec/../../includes/../libft/libft.h \
   src/exec/../../includes/minishell.h \
   src/exec/../../includes/../includes/exec.h \

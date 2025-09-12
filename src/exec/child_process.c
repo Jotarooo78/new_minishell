@@ -3,19 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   child_process.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
+/*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 13:46:05 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/09 14:40:01 by matis            ###   ########.fr       */
+/*   Updated: 2025/09/12 14:37:16 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/exec.h"
 #include "../../includes/minishell.h"
 
-void	files_and_management(t_cmd *cmd, t_cmd *cmd_list, int prev_read_fd)
+void	files_and_management(t_cmd *cmd, t_cmd *cmd_list, int prev_read_fd,
+		t_env *env)
 {
-	t_heredoc *last_hd;
+	t_heredoc	*last_hd;
 
 	unused_heredoc_fd(cmd, cmd_list);
 	last_hd = get_last_heredoc(cmd);
@@ -25,34 +26,61 @@ void	files_and_management(t_cmd *cmd, t_cmd *cmd_list, int prev_read_fd)
 		close(last_hd->heredoc_fd);
 	}
 	else if (cmd->infile && cmd->infile->name)
-		open_infile(cmd);
+		open_infile(cmd, cmd_list, env);
 	else if (prev_read_fd != -1)
 	{
 		dup2(prev_read_fd, FD_STDIN);
 		close(prev_read_fd);
 	}
 	if (cmd->outfile && cmd->outfile->name)
-		open_outfile(cmd);
+		open_outfile(cmd, cmd_list, env);
+}
+
+void	manage_built_in_or_cmd(t_cmd *cmd, t_cmd *cmd_list, int exit_status,
+		t_env *env)
+{
+	if (is_built_in(cmd))
+	{
+		exit_status = child_process_built_in(cmd, env);
+		free_all_struct(cmd_list);
+		free_my_env(env);
+		exit(exit_status);
+	}
+	if (!exe_my_cmd(cmd, cmd_list, env))
+	{
+		free_all_struct(cmd_list);
+		free_my_env(env);
+		exit(127);
+	}
 }
 
 void	child_call(t_cmd *cmd, t_cmd *cmd_list, t_env *env, int prev_read_fd)
 {
-	int	exit_status;
+	int		exit_status;
+	t_cmd	*tmp;
 
-	child_signal_handler();
-	files_and_management(cmd, cmd_list, prev_read_fd);
+	exit_status = 0;
+	files_and_management(cmd, cmd_list, prev_read_fd, env);
+	tmp = cmd_list;
+	while (tmp)
+	{
+		if (tmp != cmd)
+		{
+			if (tmp->pipefd[READ] > 2)
+				close(tmp->pipefd[READ]);
+			if (tmp->pipefd[WRITE] > 2)
+				close(tmp->pipefd[WRITE]);
+		}
+		tmp = tmp->next;
+	}
 	if (cmd->output_type == PIPEOUT)
 	{
 		close(cmd->pipefd[READ]);
 		dup2(cmd->pipefd[WRITE], FD_STDOUT);
 		close(cmd->pipefd[WRITE]);
 	}
-	if (is_built_in(cmd))
-	{
-		exit_status = child_process_built_in(cmd, env);
-		exit(exit_status);
-	}
-	exe_my_cmd(cmd, env);
+	handle_child_signals();
+	manage_built_in_or_cmd(cmd, cmd_list, exit_status, env);
 }
 
 int	wait_child(pid_t *pid, int size)
@@ -66,6 +94,8 @@ int	wait_child(pid_t *pid, int size)
 		waitpid(pid[i], &status, 0);
 		i++;
 	}
+	if (size == 0)
+		return (0);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	else if (WIFSIGNALED(status))

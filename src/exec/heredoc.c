@@ -5,59 +5,79 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/09 15:46:02 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/09 16:26:09 by armosnie         ###   ########.fr       */
+/*   Created: 2025/09/12 12:36:33 by armosnie          #+#    #+#             */
+/*   Updated: 2025/09/12 12:36:46 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/exec.h"
 #include "../../includes/minishell.h"
 
-void	heredoc_signal(char *line, int *pipe_fd_h)
-{
-	if (g_signal == SIGINT)
-	{
-		free(line);
-		close(pipe_fd_h[WRITE]);
-		exit(1);
-	}
-}
-
-int	child_process_heredoc(t_cmd *cmd, t_heredoc *heredoc, int *pipe_fd_h)
+int	child_process_heredoc(t_cmd *cmd, t_heredoc *heredoc, int *pipe_fd_h, t_env *env)
 {
 	char	*line;
+	t_cmd	*tmp;
 
-	(void)cmd;
+	// (void)cmd;
 	close(pipe_fd_h[READ]);
-	heredoc_signal_handler();
+	tmp = cmd;
+	while (tmp)
+	{
+		if (tmp->pipefd[READ] > 2)
+			close(tmp->pipefd[READ]);
+		if (tmp->pipefd[WRITE] > 2)
+			close(tmp->pipefd[WRITE]);
+		tmp = tmp->next;
+	}
+	g_signal = 0;
+	handle_heredoc_signals();
 	while (1)
 	{
+		
 		line = readline("\033[36mheredoc> \033[0m");
-		if (line == NULL)
+		if (g_signal == SIGINT)
+		{
+			if (line)
+				free(line);
+			close(pipe_fd_h[WRITE]);
+			free_all_struct(cmd);
+			free_my_env(env);
+			exit(130);
+		}
+		if (line == NULL || g_signal == SIGINT)
+		{
 			break ;
-		heredoc_signal(line, pipe_fd_h);
+		}
 		if (ft_strncmp(heredoc->delimiter, line, ft_strlen(line)) == 0
-			&& ft_strlen(line) == ft_strlen(heredoc->delimiter))
+				&& ft_strlen(line) == ft_strlen(heredoc->delimiter))
 			break ;
 		if (ft_strlen(line) > 1024)
-			return (close(pipe_fd_h[WRITE]), free(line), exit(0), 0);
+		{
+			free_all_struct(cmd);
+			free_my_env(env);
+			close(pipe_fd_h[WRITE]);
+			free(line);
+			exit(0);
+		}
 		write(pipe_fd_h[WRITE], line, ft_strlen(line));
 		write(pipe_fd_h[WRITE], "\n", 1);
 		free(line);
 	}
 	close(pipe_fd_h[WRITE]);
-	return (free(line), exit(0), 0);
+	free_all_struct(cmd);
+	free_my_env(env);
+	free(line);
+	exit(0);
+	return (0);
 }
 
 int	parent_process_heredoc(pid_t pid, int *pipe_fd_h)
 {
 	int	status;
-
+	
 	close(pipe_fd_h[WRITE]);
-	signal(SIGINT, SIG_IGN);
 	waitpid(pid, &status, 0);
-	interactive_signal_handler();
-	if (WIFSIGNALED(status))
+	if (WIFSIGNALED(status) || (WIFEXITED(status) && WEXITSTATUS(status) == 130))
 	{
 		close(pipe_fd_h[READ]);
 		return (-1);
@@ -65,13 +85,15 @@ int	parent_process_heredoc(pid_t pid, int *pipe_fd_h)
 	return (pipe_fd_h[READ]);
 }
 
-void	manage_heredocs(t_cmd *cmd)
+int	manage_heredocs(t_cmd *current, t_cmd *cmd, int prev_read_fd, t_env *env)
 {
 	t_heredoc	*heredoc;
 	pid_t		pid;
 	int			pipe_fd_h[2];
 
-	heredoc = cmd->heredocs;
+	heredoc = current->heredocs;
+	if (check_heredoc_total(cmd) == 2)
+		return (2);
 	while (heredoc)
 	{
 		if (pipe(pipe_fd_h) == -1)
@@ -80,9 +102,18 @@ void	manage_heredocs(t_cmd *cmd)
 		if (pid == -1)
 			pipe_and_pid_error(cmd, heredoc, pipe_fd_h, 2);
 		if (pid == 0)
-			child_process_heredoc(cmd, heredoc, pipe_fd_h);
+		{
+			if (prev_read_fd > 2)
+				close(prev_read_fd);
+			handle_heredoc_signals();
+			child_process_heredoc(cmd, heredoc, pipe_fd_h, env);
+		}
 		else
+		{
+			parent_ignore_signals();
 			heredoc->heredoc_fd = parent_process_heredoc(pid, pipe_fd_h);
+			handle_signals(0);
+		}
 		if (heredoc->next && heredoc->heredoc_fd != -1)
 		{
 			close(heredoc->heredoc_fd);
@@ -90,4 +121,5 @@ void	manage_heredocs(t_cmd *cmd)
 		}
 		heredoc = heredoc->next;
 	}
+	return (0);
 }

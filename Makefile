@@ -21,15 +21,15 @@ SRCS = \
 	src/parsing/tokens_to_cmds.c \
 	src/parsing/redirect_utils.c \
 	src/parsing/tokens_to_cmds_utils.c \
-	src/exec/check.c \
 	src/exec/parent_process.c \
+	src/exec/parent_process2.c \
 	src/exec/child_process.c \
 	src/exec/term_state.c \
 	src/exec/get_path.c \
 	src/exec/manage_files.c \
-	src/exec/heredoc.c \
 	src/exec/utils.c \
-	src/exec/utils_heredoc.c \
+	src/exec/heredoc.c \
+	src/exec/heredoc_utils.c \
 	src/exec/errors.c \
 	src/exec/errors2.c \
 	src/exec/init_struct_env.c \
@@ -41,6 +41,7 @@ SRCS = \
 	src/built-in/echo.c \
 	src/built-in/env.c \
 	src/built-in/exit.c \
+	src/built-in/exit_utils.c \
 	src/built-in/export.c \
 	src/built-in/pwd.c \
 	src/built-in/unset.c \
